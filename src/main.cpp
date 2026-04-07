@@ -3,8 +3,8 @@
 int main(void)
 {
     // Initialize window
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 900;
+    const int screenHeight = 550;
     InitWindow(screenWidth, screenHeight, "Spaceship Game");
 
     // Set target FPS
