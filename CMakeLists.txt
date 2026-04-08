@@ -8,15 +8,26 @@ file(GLOB SOURCES "src/*.cpp")
 # Add the executable
 add_executable(SpaceshipGame ${SOURCES})
 
-# Include directories
-target_include_directories(SpaceshipGame PRIVATE
-    ${CMAKE_SOURCE_DIR}/raylib5.5/include
-    ${CMAKE_SOURCE_DIR}/headers
-)
-
-# Link libraries (use the full path to raylib, without .lib extension)
-target_link_libraries(SpaceshipGame PRIVATE
-    "${CMAKE_SOURCE_DIR}/raylib5.5/lib/raylib.lib"
-    winmm
-    gdi32
-)
+# Detect the operating system
+if(WIN32)
+    # Windows-specific settings
+    message(STATUS "Configuring for Windows")
+    target_include_directories(SpaceshipGame PRIVATE
+        ${CMAKE_SOURCE_DIR}/raylib5.5_windows/include
+    )
+    target_link_libraries(SpaceshipGame PRIVATE
+        "${CMAKE_SOURCE_DIR}/raylib5.5_windows/lib/raylib.lib"
+        winmm
+        gdi32
+    )
+elseif(UNIX AND NOT APPLE)
+    # Linux-specific settings
+    message(STATUS "Configuring for Linux")
+    target_include_directories(SpaceshipGame PRIVATE
+        ${CMAKE_SOURCE_DIR}/raylib5.5_linux/include
+    )
+    # Use static library
+    target_link_libraries(SpaceshipGame PRIVATE
+        "${CMAKE_SOURCE_DIR}/raylib5.5_linux/lib/libraylib.a"
+    )
+endif()
