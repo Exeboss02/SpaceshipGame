@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(SpaceshipGame VERSION 0.1.0 LANGUAGES CXX)
 cmake_policy(SET CMP0072 NEW)
+set(CMAKE_CXX_STANDARD 20)
 
 # Collect all source files
 file(GLOB SOURCES "src/*.cpp")
@@ -14,6 +15,7 @@ if(WIN32)
     message(STATUS "Configuring for Windows")
     target_include_directories(SpaceshipGame PRIVATE
         ${CMAKE_SOURCE_DIR}/raylib5.5_windows/include
+        ${CMAKE_SOURCE_DIR}/headers
     )
     target_link_libraries(SpaceshipGame PRIVATE
         "${CMAKE_SOURCE_DIR}/raylib5.5_windows/lib/raylib.lib"
@@ -25,6 +27,7 @@ elseif(UNIX AND NOT APPLE)
     message(STATUS "Configuring for Linux")
     target_include_directories(SpaceshipGame PRIVATE
         ${CMAKE_SOURCE_DIR}/raylib5.5_linux/include
+        ${CMAKE_SOURCE_DIR}/headers
     )
     # Use static library
     target_link_libraries(SpaceshipGame PRIVATE

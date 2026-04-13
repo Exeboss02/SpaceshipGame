@@ -1,1 +1,1 @@
-"build/./SpaceshipGame"
+"build/Debug/./SpaceshipGame"

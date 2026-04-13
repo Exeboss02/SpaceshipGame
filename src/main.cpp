@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include "../headers/entt.hpp"
 
 int main(void)
 {
