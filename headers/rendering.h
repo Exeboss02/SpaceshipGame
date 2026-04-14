@@ -1,10 +1,11 @@
+#pragma once
 #include <raylib.h>
 #include <iostream>
 #include "../headers/entity.h"
 
-void Draw(TextureComponent textureEntity)
+void Draw(TextureComponent* textureEntity)
 {
-    DrawTextureV(textureEntity.texture, {textureEntity.position}, WHITE);
+    DrawTextureV(textureEntity->texture, {textureEntity->position}, WHITE);
 }
 
 void SetTexture(Texture2D* texture, std::string path)

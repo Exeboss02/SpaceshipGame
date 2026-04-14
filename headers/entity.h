@@ -10,7 +10,7 @@ struct TextureComponent
 
 struct MoveComponent
 {
-    int velocity = {};
+    Vector2 velocity = {};
 };
 
 struct InputComponent
@@ -18,3 +18,5 @@ struct InputComponent
     float yInput = {};
     float xInput = {};
 };
+
+void UpdateInputComponent(InputComponent* input);

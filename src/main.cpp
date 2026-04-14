@@ -21,7 +21,11 @@ int main(void)
     player.textureComponent.texture.width = 150;
     player.textureComponent.texture.height = 80;
     player.position = Vector2(100, 80);
+    player.speed = 125;
     SetTexture(&player.textureComponent.texture, "game/assets/textures/HumanoidTpose.png");
+
+    int a = 0;
+    a++;
 
     // Main game loop
     while (!WindowShouldClose())
@@ -35,7 +39,9 @@ int main(void)
             DrawText("Hello, Raylib!", 190, 200, 20, BLACK);
             //DrawRectangle(200, 100, 400, 250, customColor);
 
-            Draw(player.textureComponent);
+            UpdateInputComponent(&player.inputComponent);
+            MoveEntity(&player);
+            Draw(&player.textureComponent);
 
         EndDrawing();
     }

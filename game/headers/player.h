@@ -8,4 +8,7 @@ struct Player
     InputComponent inputComponent = {};
 
     Vector2 position = {};
+    float speed;
 };
+
+void MoveEntity(Player* player); //this is EXTREMELY temporary
