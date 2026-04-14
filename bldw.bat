@@ -1,5 +1,7 @@
 @echo off
 
+cls
+
 :: Create build directory and navigate into it
 if not exist "build" mkdir build
 cd build
