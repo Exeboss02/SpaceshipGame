@@ -17,12 +17,13 @@ if(WIN32)
     # Windows-specific settings
     message(STATUS "Configuring for Windows")
     target_include_directories(SpaceshipGame PRIVATE
-        ${CMAKE_SOURCE_DIR}/raylib5.5_windows/include
+        ${CMAKE_SOURCE_DIR}/lib/raylib5.5_windows/include
         ${CMAKE_SOURCE_DIR}/headers
         ${CMAKE_SOURCE_DIR}/game/headers
     )
     target_link_libraries(SpaceshipGame PRIVATE
-        "${CMAKE_SOURCE_DIR}/raylib5.5_windows/lib/raylib.lib"
+        "${CMAKE_SOURCE_DIR}/lib/raylib5.5_windows/lib/raylib.lib"
+        "${CMAKE_SOURCE_DIR}/lib/lua55.lib"
         winmm
         gdi32
     )
@@ -30,12 +31,12 @@ elseif(UNIX AND NOT APPLE)
     # Linux-specific settings
     message(STATUS "Configuring for Linux")
     target_include_directories(SpaceshipGame PRIVATE
-        ${CMAKE_SOURCE_DIR}/raylib5.5_linux/include
+        ${CMAKE_SOURCE_DIR}/lib/raylib5.5_linux/include
         ${CMAKE_SOURCE_DIR}/headers
         ${CMAKE_SOURCE_DIR}/game/headers
     )
     # Use static library
     target_link_libraries(SpaceshipGame PRIVATE
-        "${CMAKE_SOURCE_DIR}/raylib5.5_linux/lib/libraylib.a"
+        "${CMAKE_SOURCE_DIR}/lib/raylib5.5_linux/lib/libraylib.a"
     )
 endif()

@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <string>
 #include <iostream>
+#include <lua.hpp>
 
 #include "../headers/entt.hpp"
 #include "../headers/rendering.h"
@@ -24,8 +25,25 @@ int main(void)
     player.speed = 125;
     SetTexture(&player.textureComponent.texture, "game/assets/textures/HumanoidTpose.png");
 
-    int a = 0;
-    a++;
+    // Create a Lua state
+    lua_State* L = luaL_newstate();
+
+    // Load standard Lua libraries
+    luaL_openlibs(L);
+
+    // Run a simple Lua script
+    const char* luaScript = "print('Lua is working!')";
+    int result = luaL_dostring(L, luaScript);
+
+    // Check for errors
+    if (result != LUA_OK) {
+        std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
+        lua_close(L);
+        return 1;
+    }
+
+    // Clean up
+    lua_close(L);
 
     // Main game loop
     while (!WindowShouldClose())
