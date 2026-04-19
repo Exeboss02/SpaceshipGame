@@ -38,5 +38,6 @@ elseif(UNIX AND NOT APPLE)
     # Use static library
     target_link_libraries(SpaceshipGame PRIVATE
         "${CMAKE_SOURCE_DIR}/lib/raylib5.5_linux/lib/libraylib.a"
+        "${CMAKE_SOURCE_DIR}/lib/liblua55.a"
     )
 endif()
