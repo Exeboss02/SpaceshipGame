@@ -21,7 +21,7 @@ int main(void)
     Player player;
     player.textureComponent.texture.width = 150;
     player.textureComponent.texture.height = 80;
-    player.position = Vector2(100, 80);
+    player.position = Vector2{100, 80};
     player.speed = 125;
     SetTexture(&player.textureComponent.texture, "game/assets/textures/HumanoidTpose.png");
 
