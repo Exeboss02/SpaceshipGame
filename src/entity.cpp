@@ -1,4 +1,4 @@
-#include "../headers/entity.h"
+#include "../headers/entities.h"
 
 void UpdateInputComponent(InputComponent* input)
 {

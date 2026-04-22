@@ -5,7 +5,7 @@
 
 #include "../headers/entt.hpp"
 #include "../headers/rendering.h"
-#include "../game/headers/player.h"
+#include "../game/headers/gameEntities.h"
 
 int main(void)
 {
@@ -17,13 +17,6 @@ int main(void)
     // Set target FPS
     SetTargetFPS(144);
     Color customColor = {255, 80, 30, 255};
-
-    Player player;
-    player.textureComponent.texture.width = 150;
-    player.textureComponent.texture.height = 80;
-    player.position = Vector2{100, 80};
-    player.speed = 125;
-    SetTexture(&player.textureComponent.texture, "game/assets/textures/HumanoidTpose.png");
 
     // Create a Lua state
     lua_State* L = luaL_newstate();

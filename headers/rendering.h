@@ -1,7 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include <iostream>
-#include "../headers/entity.h"
+#include "../headers/entities.h"
 
 void Draw(TextureComponent* textureEntity)
 {

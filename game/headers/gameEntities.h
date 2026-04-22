@@ -1,5 +1,5 @@
 #pragma once
-#include "../../headers/entity.h"
+#include "../../headers/entities.h"
 
 struct Player
 {
@@ -9,6 +9,15 @@ struct Player
 
     Vector2 position = {};
     float speed;
+};
+
+struct PlayerEntity
+{
+    //ha noll-komponent i början för att kunna göra if-check ifall den har en kompnonent eller inte
+    int id;
+    int textureIndex;
+    int moveIndex;
+    int inputIndex;
 };
 
 void MoveEntity(Player* player); //this is EXTREMELY temporary
