@@ -1,23 +1,28 @@
 #pragma once
-#include "../../headers/entities.h"
+#include "../../headers/rendering.h"
 
-struct Player
+enum GameTag
 {
-    TextureComponent textureComponent = {};
-    MoveComponent moveComponent = {};
-    InputComponent inputComponent = {};
-
-    Vector2 position = {};
-    float speed;
+    NONE,
+    PLAYER
 };
 
-struct PlayerEntity
+enum BulletPattern
 {
-    //ha noll-komponent i början för att kunna göra if-check ifall den har en kompnonent eller inte
-    int id;
-    int textureIndex;
-    int moveIndex;
-    int inputIndex;
+    STRAIGHT
 };
 
-void MoveEntity(Player* player); //this is EXTREMELY temporary
+struct BulletComponent
+{
+    MoveComponent moveComponent;
+    TextureComponent textureComponent;
+};
+
+struct GunComponent
+{
+    BulletPattern pattern = BulletPattern::STRAIGHT;
+    float fireRate = 1; // shots/sec
+};
+
+void PlayerUpdate(entt::registry& registry);
+void CreateGameEntities(entt::registry& registry);

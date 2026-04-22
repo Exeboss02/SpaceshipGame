@@ -1,16 +1,18 @@
 #pragma once
 #include <raylib.h>
+#include "../headers/entt.hpp"
 
 struct TextureComponent
 {
     Vector2 position = {};
-    Vector2 velocity = {};
     Texture2D texture = {};
 };
 
 struct MoveComponent
 {
+    Vector2 position = {};
     Vector2 velocity = {};
+    float speedMultiplier = 1.0f;
 };
 
 struct InputComponent
@@ -19,4 +21,5 @@ struct InputComponent
     float xInput = {};
 };
 
-void UpdateInputComponent(InputComponent* input);
+void UpdateInputComponents(entt::registry& registry);
+void UpdateMoveComponents(entt::registry& registry);

@@ -3,8 +3,6 @@
 #include <iostream>
 #include <lua.hpp>
 
-#include "../headers/entt.hpp"
-#include "../headers/rendering.h"
 #include "../game/headers/gameEntities.h"
 
 int main(void)
@@ -38,6 +36,10 @@ int main(void)
     // Clean up
     lua_close(L);
 
+    entt::registry registry;
+
+    CreateGameEntities(registry);
+
     // Main game loop
     while (!WindowShouldClose())
     {
@@ -50,9 +52,12 @@ int main(void)
             DrawText("Hello, Raylib!", 190, 200, 20, BLACK);
             //DrawRectangle(200, 100, 400, 250, customColor);
 
-            UpdateInputComponent(&player.inputComponent);
-            MoveEntity(&player);
-            Draw(&player.textureComponent);
+            UpdateInputComponents(registry);
+
+            PlayerUpdate(registry);
+
+            UpdateMoveComponents(registry);
+            DrawTextureComponents(registry);
 
         EndDrawing();
     }

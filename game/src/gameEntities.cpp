@@ -1,28 +1,29 @@
 #include "../game/headers/gameEntities.h"
 
-void MoveEntity(Player* player) //this is EXTREMELY temporary
+void PlayerUpdate(entt::registry& registry)
 {
-    player->moveComponent.velocity = Vector2{player->inputComponent.xInput * player->speed * GetFrameTime(), 
-        player->inputComponent.yInput * player->speed * GetFrameTime()};
-
-
-    player->position.x = player->position.x + player->moveComponent.velocity.x;
-    player->position.y = player->position.y + player->moveComponent.velocity.y;
-
-    player->textureComponent.position = player->position;
+    auto view = registry.view<MoveComponent, InputComponent, GameTag>();
+    for (auto [entity, moveComponent, input, gameTag] : view.each())
+    {
+        if(gameTag == GameTag::PLAYER)
+        {
+            float deltaTime = GetFrameTime();
+            moveComponent.velocity.x = input.xInput * moveComponent.speedMultiplier * deltaTime;
+            moveComponent.velocity.y = input.yInput * moveComponent.speedMultiplier * deltaTime;
+        }
+    }
 }
 
 void CreateGameEntities(entt::registry& registry)
 {
+    Texture2D playerTexture;
+    playerTexture.width = 150;
+    playerTexture.height = 80;
+    SetTexture(&playerTexture, "game/assets/textures/HumanoidTpose.png");
+
     entt::entity player = registry.create();
-    registry.emplace<TextureComponent>(player, screenWidth / 2.0f, screenHeight / 2.0f);
-
-    här
-
-
-    player.textureComponent.texture.width = 150;
-    player.textureComponent.texture.height = 80;
-    player.position = Vector2{100, 80};
-    player.speed = 125;
-    SetTexture(&player.textureComponent.texture, "game/assets/textures/HumanoidTpose.png");
+    registry.emplace<GameTag>(player, PLAYER);
+    registry.emplace<TextureComponent>(player, Vector2{100, 80}, playerTexture);
+    registry.emplace<MoveComponent>(player, Vector2{100, 80}, Vector2{0, 0}, 125.0f);
+    registry.emplace<InputComponent>(player);
 }

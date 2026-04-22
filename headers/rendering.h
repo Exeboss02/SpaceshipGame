@@ -3,22 +3,5 @@
 #include <iostream>
 #include "../headers/entities.h"
 
-void Draw(TextureComponent* textureEntity)
-{
-    DrawTextureV(textureEntity->texture, {textureEntity->position}, WHITE);
-}
-
-void SetTexture(Texture2D* texture, std::string path)
-{
-    if(!texture)
-    {
-        std::cout << "texture was nullptr" << std::endl;
-        return;
-    }
-
-    int width = texture->width;
-    int height = texture->height;
-    *texture = LoadTexture(path.c_str());
-    texture->width = width;
-    texture->height = height;
-}
+void DrawTextureComponents(entt::registry& registry);
+void SetTexture(Texture2D* texture, std::string path);
