@@ -16,14 +16,9 @@ void PlayerUpdate(entt::registry& registry)
 
 void CreateGameEntities(entt::registry& registry)
 {
-    Texture2D playerTexture;
-    playerTexture.width = 150;
-    playerTexture.height = 80;
-    SetTexture(&playerTexture, "game/assets/textures/HumanoidTpose.png");
-
     entt::entity player = registry.create();
+    AddMoveComponent(registry, player, Vector2{100.0f, 80.0f}, Vector2{0, 0}, 125.0f);
+    AddTextureComponent(registry, player, "game/assets/textures/HumanoidTpose.png", Vector2{160.0f, 80.0f}, Vector2{150.0f, 80.0f});
+    AddInputComponent(registry, player);
     registry.emplace<GameTag>(player, PLAYER);
-    registry.emplace<TextureComponent>(player, Vector2{100, 80}, playerTexture);
-    registry.emplace<MoveComponent>(player, Vector2{100, 80}, Vector2{0, 0}, 125.0f);
-    registry.emplace<InputComponent>(player);
 }

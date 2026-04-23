@@ -1,6 +1,67 @@
 #include "../headers/entities.h"
 
-void UpdateInputComponents(entt::registry& registry)
+void DrawTextureComponents(entt::registry& registry)
+{
+    auto view = registry.view<TextureComponent>();
+    for (auto [entity, textureComponent] : view.each())
+    {
+        DrawTextureV(textureComponent.texture, {textureComponent.position}, WHITE);
+    }
+}
+
+bool SetTexture(Texture2D* texture, std::string path)
+{
+    if(!texture)
+    {
+        std::cout << "texture was nullptr" << std::endl;
+        return false;
+    }
+
+    int width = texture->width;
+    int height = texture->height;
+    *texture = LoadTexture(path.c_str());
+    texture->width = width;
+    texture->height = height;
+
+    return true;
+}
+
+void AddInputComponent(entt::registry& registry, entt::entity& entity)
+{
+    registry.emplace<InputComponent>(entity);
+}
+
+void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
+{
+    registry.emplace<MoveComponent>(entity, position, velocity, speedMultiplier);
+}
+
+bool AddTextureComponent(entt::registry &registry, entt::entity &entity, std::string texturePath, Vector2 size, Vector2 position)
+{
+    Texture2D texture;
+    texture.width = size.x;
+    texture.height = size.y;
+    bool success = SetTexture(&texture, texturePath);
+    
+    if(success)
+    {
+        registry.emplace<TextureComponent>(entity, position, texture);
+        return true;
+    }
+
+    return false;
+}
+
+template<typename T, typename... Args>
+void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
+{
+    registry.emplace<T>(entity, std::forward<Args>(args)...);
+}
+
+
+//----------------------UPDATES----------------------------------------------------------------------------------------------------
+
+void UpdateInputComponents(entt::registry &registry)
 {
     auto view = registry.view<InputComponent>();
     for (auto [entity, input] : view.each())

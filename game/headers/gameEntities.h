@@ -26,3 +26,5 @@ struct GunComponent
 
 void PlayerUpdate(entt::registry& registry);
 void CreateGameEntities(entt::registry& registry);
+
+void AddGameTagComponent(entt::registry& registry, entt::entity& entity);

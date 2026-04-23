@@ -4,4 +4,4 @@
 #include "../headers/entities.h"
 
 void DrawTextureComponents(entt::registry& registry);
-void SetTexture(Texture2D* texture, std::string path);
+bool SetTexture(Texture2D* texture, std::string path);
