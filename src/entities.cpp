@@ -52,13 +52,6 @@ bool AddTextureComponent(entt::registry &registry, entt::entity &entity, std::st
     return false;
 }
 
-template<typename T, typename... Args>
-void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
-{
-    registry.emplace<T>(entity, std::forward<Args>(args)...);
-}
-
-
 //----------------------UPDATES----------------------------------------------------------------------------------------------------
 
 void UpdateInputComponents(entt::registry &registry)
