@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 void DrawTextureComponents(entt::registry& registry)
 {
@@ -29,6 +30,11 @@ bool SetTexture(Texture2D* texture, std::string path)
 void AddInputComponent(entt::registry& registry, entt::entity& entity)
 {
     registry.emplace<InputComponent>(entity);
+}
+
+void AddTimerComponent(entt::registry &registry, entt::entity &entity, float startTime)
+{
+    registry.emplace<TimerComponent>(entity, startTime);
 }
 
 void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
@@ -66,6 +72,8 @@ void UpdateInputComponents(entt::registry &registry)
         if(IsKeyDown(KEY_D)) input.xInput++;
         if(IsKeyDown(KEY_W)) input.yInput--;
         if(IsKeyDown(KEY_S)) input.yInput++;
+        if(IsKeyDown(KEY_RIGHT)) input.shootButton = true;
+        else input.shootButton = false;
     }
 }
 
@@ -82,4 +90,19 @@ void UpdateMoveComponents(entt::registry &registry)
             textureComponent->position = moveComponent.position;
         }
     }
+}
+
+void UpdateTimerComponents(entt::registry &registry)
+{
+    auto view = registry.view<TimerComponent>();
+    for (auto [entity, timer] : view.each())
+    {
+        if(!timer.paused && timer.currentTime > 0) timer.currentTime -= GetFrameTime();
+    }
+}
+
+void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity)
+{
+    auto* timer = registry.try_get<TimerComponent>(timerHoldingEntity);
+    if(timer) timer->currentTime = timer->startTime;
 }

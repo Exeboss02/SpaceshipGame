@@ -55,6 +55,8 @@ int main(void)
             UpdateInputComponents(registry);
 
             PlayerUpdate(registry);
+            EnemyUpdate(registry);
+            BulletUpdate(registry);
 
             UpdateMoveComponents(registry);
             DrawTextureComponents(registry);

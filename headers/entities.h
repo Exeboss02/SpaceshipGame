@@ -6,6 +6,14 @@
 #include "../headers/entities.h"
 #include "../headers/entt.hpp"
 
+struct TimerComponent
+{
+    float startTime = 1.0f;
+    float currentTime = startTime;
+    bool paused = false;
+    std::string id = "";
+};
+
 struct TextureComponent
 {
     Vector2 position = {};
@@ -23,6 +31,7 @@ struct InputComponent
 {
     float yInput = {};
     float xInput = {};
+    bool shootButton = false;
 };
 
 //Rendering and textures
@@ -32,6 +41,9 @@ bool SetTexture(Texture2D* texture, std::string path);
 void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 velocity, float speedMultiplier);
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);
 void AddInputComponent(entt::registry& registry, entt::entity& entity);
+void AddTimerComponent(entt::registry& registry, entt::entity& entity, float startTime);
 
 void UpdateInputComponents(entt::registry& registry);
 void UpdateMoveComponents(entt::registry& registry);
+void UpdateTimerComponents(entt::registry& registry);
+void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);

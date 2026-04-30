@@ -1,4 +1,5 @@
 #include "../game/headers/gameEntities.h"
+#include "gameEntities.h"
 
 template<typename T, typename... Args>
 void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
@@ -14,9 +15,10 @@ entt::entity CreateEnemyEntity(entt::registry &registry, EnemyTag tag)
     {
         case EnemyTag::DRONE:
 
-            AddMoveComponent(registry, enemy, Vector2{0, 0}, Vector2{0, 1}, -12.0f * GetFrameTime());
+            AddMoveComponent(registry, enemy, Vector2{0, 0}, Vector2{0, 1}, -120.0f * GetFrameTime());
             AddTextureComponent(registry, enemy, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, Vector2{80.0f, 0.0f});
             AddCustomComponent<GameTag>(registry, enemy, GameTag::ENEMY);
+            AddCustomComponent<GunComponent>(registry, enemy);
             break;
         
         default:
@@ -24,6 +26,35 @@ entt::entity CreateEnemyEntity(entt::registry &registry, EnemyTag tag)
     }
 
     return enemy;
+}
+
+entt::entity CreateBulletEntity(entt::registry &registry, BulletType bulletType, Vector2 position)
+{
+    entt::entity bullet = registry.create();
+    AddMoveComponent(registry, bullet, position, Vector2{0, 1}, -12.0f * GetFrameTime());
+    AddCustomComponent<GameTag>(registry, bullet, GameTag::BULLET);
+    AddCustomComponent<BulletType>(registry, bullet, bulletType);
+
+    switch(bulletType)
+    {
+        case(BulletType::STANDARD):
+        {
+            AddTextureComponent(registry, bullet, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, position);
+            auto* moveComponent = registry.try_get<MoveComponent>(bullet);
+            if(moveComponent) moveComponent->speedMultiplier = -800.0f;
+            break;
+        }
+
+        default:
+        {
+            AddTextureComponent(registry, bullet, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, Vector2{80.0f, 0.0f});
+            auto* moveComponent = registry.try_get<MoveComponent>(bullet);
+            if(moveComponent) moveComponent->speedMultiplier = -800.0f;
+            break;
+        }
+    }
+
+    return entt::entity();
 }
 
 void PlayerUpdate(entt::registry &registry)
@@ -36,6 +67,8 @@ void PlayerUpdate(entt::registry &registry)
             float deltaTime = GetFrameTime();
             moveComponent.velocity.x = input.xInput * moveComponent.speedMultiplier * deltaTime;
             moveComponent.velocity.y = input.yInput * moveComponent.speedMultiplier * deltaTime;
+
+            if(input.shootButton) CreateBulletEntity(registry, BulletType::STANDARD, moveComponent.position);
         }
     }
 }
@@ -54,13 +87,31 @@ void EnemyUpdate(entt::registry& registry)
     }
 }
 
+void BulletUpdate(entt::registry &registry)
+{
+    auto view = registry.view<MoveComponent, GameTag>();
+    for (auto [entity, moveComponent, gameTag] : view.each())
+    {
+        if(gameTag == GameTag::BULLET)
+        {
+            float deltaTime = GetFrameTime();
+            moveComponent.velocity.x = 0;
+            moveComponent.velocity.y = moveComponent.speedMultiplier * deltaTime;
+        }
+    }
+
+    //also delete bullets after some time
+}
+
 void CreateGameEntities(entt::registry& registry)
 {
     entt::entity player = registry.create();
     AddMoveComponent(registry, player, Vector2{100.0f, 80.0f}, Vector2{0, 0}, 125.0f);
     AddTextureComponent(registry, player, "game/assets/textures/HumanoidTpose.png", Vector2{160.0f, 80.0f}, Vector2{150.0f, 80.0f});
     AddInputComponent(registry, player);
+    AddTimerComponent(registry, player, 0.5f);
     AddCustomComponent<GameTag>(registry, player, GameTag::PLAYER);
+    AddCustomComponent<GunComponent>(registry, player);
 
     CreateEnemyEntity(registry, EnemyTag::DRONE);
 }
