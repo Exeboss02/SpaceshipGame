@@ -3,8 +3,7 @@
 #include <iostream>
 #include <raylib.h>
 
-#include "../headers/entities.h"
-#include "../headers/entt.hpp"
+#include "../headers/resourceStorage.h"
 
 struct TimerComponent
 {
@@ -17,7 +16,8 @@ struct TimerComponent
 struct TextureComponent
 {
     Vector2 position = {};
-    Texture2D texture = {};
+    Vector2 size = {};
+    TextureContainer* textureContainer = nullptr;
 };
 
 struct MoveComponent
@@ -36,7 +36,7 @@ struct InputComponent
 
 //Rendering and textures
 void DrawTextureComponents(entt::registry& registry);
-bool SetTexture(Texture2D* texture, std::string path);
+TextureContainer* GetTexture(std::string path);
 
 void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 velocity, float speedMultiplier);
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);

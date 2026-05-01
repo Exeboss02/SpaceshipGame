@@ -37,7 +37,6 @@ int main(void)
     lua_close(L);
 
     entt::registry registry;
-
     CreateGameEntities(registry);
 
     // Main game loop
@@ -53,6 +52,7 @@ int main(void)
             //DrawRectangle(200, 100, 400, 250, customColor);
 
             UpdateInputComponents(registry);
+            UpdateTimerComponents(registry);
 
             PlayerUpdate(registry);
             EnemyUpdate(registry);

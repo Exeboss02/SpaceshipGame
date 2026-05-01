@@ -1,30 +1,37 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 void DrawTextureComponents(entt::registry& registry)
 {
     auto view = registry.view<TextureComponent>();
     for (auto [entity, textureComponent] : view.each())
     {
-        DrawTextureV(textureComponent.texture, {textureComponent.position}, WHITE);
+        //this is so that source texture can have different sizes depending on which entity
+        textureComponent.textureContainer->texture.width = textureComponent.size.x;
+        textureComponent.textureContainer->texture.height = textureComponent.size.y;
+
+        DrawTextureV(textureComponent.textureContainer->texture, {textureComponent.position}, WHITE);
     }
 }
 
-bool SetTexture(Texture2D* texture, std::string path)
+TextureContainer* GetTexture(std::string path)
 {
-    if(!texture)
+    static TextureStorage storage;
+
+    for (int i = 0; i < storage.textures.size(); i++)
     {
-        std::cout << "texture was nullptr" << std::endl;
-        return false;
+        if(storage.textures[i]->path == path)
+        {
+            return storage.textures[i];
+        }
     }
 
-    int width = texture->width;
-    int height = texture->height;
-    *texture = LoadTexture(path.c_str());
-    texture->width = width;
-    texture->height = height;
+    //not what I wanted, but has to work in the meantime. REMEMBER to delete
+    TextureContainer* texture = new TextureContainer();
+    texture->path = path;
+    texture->texture = LoadTexture(path.c_str());
+    storage.textures.push_back(texture);
 
-    return true;
+    return texture;
 }
 
 void AddInputComponent(entt::registry& registry, entt::entity& entity)
@@ -44,14 +51,11 @@ void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 po
 
 bool AddTextureComponent(entt::registry &registry, entt::entity &entity, std::string texturePath, Vector2 size, Vector2 position)
 {
-    Texture2D texture;
-    texture.width = size.x;
-    texture.height = size.y;
-    bool success = SetTexture(&texture, texturePath);
+    TextureContainer* texture = GetTexture(texturePath);
     
-    if(success)
+    if(texture)
     {
-        registry.emplace<TextureComponent>(entity, position, texture);
+        registry.emplace<TextureComponent>(entity, position, size, texture);
         return true;
     }
 

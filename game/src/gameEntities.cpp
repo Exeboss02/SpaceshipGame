@@ -54,7 +54,7 @@ entt::entity CreateBulletEntity(entt::registry &registry, BulletType bulletType,
         }
     }
 
-    return entt::entity();
+    return bullet;
 }
 
 void PlayerUpdate(entt::registry &registry)
@@ -68,7 +68,16 @@ void PlayerUpdate(entt::registry &registry)
             moveComponent.velocity.x = input.xInput * moveComponent.speedMultiplier * deltaTime;
             moveComponent.velocity.y = input.yInput * moveComponent.speedMultiplier * deltaTime;
 
-            if(input.shootButton) CreateBulletEntity(registry, BulletType::STANDARD, moveComponent.position);
+            if(input.shootButton)
+            {
+                auto* timer = registry.try_get<TimerComponent>(entity);
+
+                if(timer && timer->currentTime <= 0)
+                {
+                    timer->currentTime = timer->startTime;
+                    CreateBulletEntity(registry, BulletType::STANDARD, moveComponent.position);
+                }
+            }
         }
     }
 }
