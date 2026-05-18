@@ -1,5 +1,4 @@
 #include "../game/headers/gameEntities.h"
-#include "gameEntities.h"
 
 template<typename T, typename... Args>
 void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
@@ -19,9 +18,11 @@ entt::entity CreateEnemyEntity(entt::registry &registry, EnemyTag tag)
             auto* moveComponent = registry.try_get<MoveComponent>(enemy);
             if(moveComponent) moveComponent->speedMultiplier = 80.0f;
 
+            AddBoxColliderComponent(registry, enemy, Vector2(0, 0), Vector2{80.0f, 50.0f});
             AddTextureComponent(registry, enemy, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, Vector2{80.0f, 0.0f});
             AddCustomComponent<GameTag>(registry, enemy, GameTag::ENEMY);
             AddCustomComponent<GunComponent>(registry, enemy);
+            AddCustomComponent<HealthComponent>(registry, enemy, 10.0f);
             break;
         }
         
@@ -48,6 +49,9 @@ entt::entity CreateBulletEntity(entt::registry &registry, BulletType bulletType,
             AddTextureComponent(registry, bullet, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, position);
             auto* moveComponent = registry.try_get<MoveComponent>(bullet);
             if(moveComponent) moveComponent->speedMultiplier = -800.0f;
+
+            AddBoxColliderComponent(registry, bullet, position, Vector2{80.0f, 50.0f});
+            AddCustomComponent<DamageComponent>(registry, bullet, 11.0f);
             break;
         }
 
@@ -56,6 +60,9 @@ entt::entity CreateBulletEntity(entt::registry &registry, BulletType bulletType,
             AddTextureComponent(registry, bullet, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, Vector2{80.0f, 0.0f});
             auto* moveComponent = registry.try_get<MoveComponent>(bullet);
             if(moveComponent) moveComponent->speedMultiplier = -800.0f;
+
+            AddBoxColliderComponent(registry, bullet, Vector2{80.0f, 0.0f}, Vector2{80.0f, 50.0f});
+            AddCustomComponent<DamageComponent>(registry, bullet, 2.0f);
             break;
         }
     }
@@ -101,14 +108,42 @@ void PlayerUpdate(entt::registry &registry)
 
 void EnemyUpdate(entt::registry& registry)
 {
+    //Movement
     auto view = registry.view<MoveComponent, GameTag>();
-    for (auto [entity, moveComponent, gameTag] : view.each())
+    for (auto [enemy, moveComponent, gameTag] : view.each())
     {
         if(gameTag == GameTag::ENEMY)
         {
             float deltaTime = GetFrameTime();
             moveComponent.velocity.x = 0;
             moveComponent.velocity.y = moveComponent.speedMultiplier * deltaTime;
+
+            //Collision
+            auto* collider = registry.try_get<BoxColliderComponent>(enemy);
+            //std::cout << collider->inCollision << std::endl;
+            
+            if(collider->inCollision)
+            {
+                std::cout << "ENEMY WAS HIT!!!!!!!!" << std::endl;
+
+                auto* hitEntityTag = registry.try_get<GameTag>(collider->hitEntity);
+                auto* damageComponent = registry.try_get<DamageComponent>(collider->hitEntity);
+                auto* healthComponent = registry.try_get<HealthComponent>(enemy);
+
+                if(damageComponent && healthComponent && hitEntityTag)
+                {
+                    if(*hitEntityTag == GameTag::BULLET)
+                    {
+                        healthComponent->hp -= damageComponent->damage;
+                        registry.destroy(collider->hitEntity);
+
+                        if(healthComponent->hp <= 0)
+                        {
+                            registry.destroy(enemy);
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -123,6 +158,22 @@ void BulletUpdate(entt::registry &registry)
             float deltaTime = GetFrameTime();
             moveComponent.velocity.x = 0;
             moveComponent.velocity.y = moveComponent.speedMultiplier * deltaTime;
+
+            //Collision
+            auto* collider = registry.try_get<BoxColliderComponent>(entity);
+            if(collider)
+            {
+                auto* hitTag = registry.try_get<GameTag>(collider->hitEntity);
+
+                auto* otherCollider = registry.try_get<BoxColliderComponent>(collider->hitEntity);
+                std::cout << "From BulletUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;
+
+                if(hitTag && *hitTag != GameTag::PLAYER)
+                {
+                    registry.destroy(entity);
+                    registry.destroy(collider->hitEntity);
+                }
+            }
         }
     }
 
@@ -136,6 +187,7 @@ void CreateGameEntities(entt::registry& registry)
     AddTextureComponent(registry, player, "game/assets/textures/HumanoidTpose.png", Vector2{160.0f, 80.0f}, Vector2{150.0f, 80.0f});
     AddInputComponent(registry, player);
     AddTimerComponent(registry, player, 0.5f);
+    AddBoxColliderComponent(registry, player, Vector2(100, 100), Vector2{160.0f, 80.0f});
     AddCustomComponent<GameTag>(registry, player, GameTag::PLAYER);
     AddCustomComponent<GunComponent>(registry, player);
 

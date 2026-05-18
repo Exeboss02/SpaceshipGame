@@ -5,4 +5,4 @@
 struct Scene
 {
     entt::registry registry;
-}
+};

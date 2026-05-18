@@ -31,7 +31,12 @@ struct GunComponent
     float spreadFactor = 0.0f;
 };
 
-struct BulletEntity
+struct HealthComponent
+{
+    float hp = 10.0f;
+};
+
+struct DamageComponent
 {
     float damage = 1.0f;
 };

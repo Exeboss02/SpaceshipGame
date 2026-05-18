@@ -47,7 +47,8 @@ void AddTimerComponent(entt::registry &registry, entt::entity &entity, float sta
 
 void AddBoxColliderComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 scale)
 {
-    registry.emplace<BoxColliderComponent>(entity, position, scale);
+    Rectangle rectangle = {position.x, position.y, scale.x, scale.y};
+    registry.emplace<BoxColliderComponent>(entity, rectangle, false);
 }
 
 void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
@@ -89,8 +90,33 @@ void UpdateInputComponents(entt::registry &registry)
     }
 }
 
-void UpdateBoxColliderComponents(entt::registry &registry)
-{
+void UpdateColliderComponents(entt::registry &registry)
+{    
+    //may do AB and BA collision checks, but I'm not sure if I have time to optimize
+    auto view = registry.view<BoxColliderComponent>();
+    for (auto [aEntity, aCollider] : view.each())
+    {
+        for (auto [bEntity, bCollider] : view.each())
+        {
+            if(aEntity != bEntity)
+            {
+                if(CheckCollisionRecs(aCollider.rectangle, bCollider.rectangle))
+                {
+                    aCollider.inCollision = true;
+                    aCollider.hitEntity = bEntity;
+
+                    bCollider.inCollision = true;
+                    bCollider.hitEntity = aEntity;
+                }
+
+                else
+                {
+                    aCollider.inCollision = false;
+                    bCollider.inCollision = false;
+                }
+            }
+        }
+    }
 }
 
 void UpdateMoveComponents(entt::registry &registry)
@@ -104,6 +130,12 @@ void UpdateMoveComponents(entt::registry &registry)
         if (auto* textureComponent = registry.try_get<TextureComponent>(entity))
         {
             textureComponent->position = moveComponent.position;
+        }
+
+        if (auto* collider = registry.try_get<BoxColliderComponent>(entity))
+        {
+            collider->rectangle.x = moveComponent.position.x;
+            collider->rectangle.y = moveComponent.position.y;
         }
     }
 }

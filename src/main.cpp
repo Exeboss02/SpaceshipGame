@@ -53,6 +53,7 @@ int main(void)
 
             UpdateInputComponents(registry);
             UpdateTimerComponents(registry);
+            UpdateColliderComponents(registry);
 
             PlayerUpdate(registry);
             EnemyUpdate(registry);
