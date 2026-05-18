@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 void DrawTextureComponents(entt::registry& registry)
 {
@@ -44,6 +45,11 @@ void AddTimerComponent(entt::registry &registry, entt::entity &entity, float sta
     registry.emplace<TimerComponent>(entity, startTime);
 }
 
+void AddBoxColliderComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 scale)
+{
+    registry.emplace<BoxColliderComponent>(entity, position, scale);
+}
+
 void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
 {
     registry.emplace<MoveComponent>(entity, position, velocity, speedMultiplier);
@@ -78,7 +84,13 @@ void UpdateInputComponents(entt::registry &registry)
         if(IsKeyDown(KEY_S)) input.yInput++;
         if(IsKeyDown(KEY_RIGHT)) input.shootButton = true;
         else input.shootButton = false;
+        if(IsKeyDown(KEY_UP)) input.arrowUp = true;
+        else input.arrowUp = false;
     }
+}
+
+void UpdateBoxColliderComponents(entt::registry &registry)
+{
 }
 
 void UpdateMoveComponents(entt::registry &registry)

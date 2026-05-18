@@ -32,6 +32,13 @@ struct InputComponent
     float yInput = {};
     float xInput = {};
     bool shootButton = false;
+    bool arrowUp = false;
+};
+
+struct BoxColliderComponent
+{
+    Vector2 position;
+    Vector2 scale;
 };
 
 //Rendering and textures
@@ -42,8 +49,10 @@ void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 po
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);
 void AddInputComponent(entt::registry& registry, entt::entity& entity);
 void AddTimerComponent(entt::registry& registry, entt::entity& entity, float startTime);
+void AddBoxColliderComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 scale);
 
 void UpdateInputComponents(entt::registry& registry);
+void UpdateBoxColliderComponents(entt::registry& registry);
 void UpdateMoveComponents(entt::registry& registry);
 void UpdateTimerComponents(entt::registry& registry);
 void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);

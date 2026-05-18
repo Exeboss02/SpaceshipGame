@@ -13,16 +13,22 @@ entt::entity CreateEnemyEntity(entt::registry &registry, EnemyTag tag)
 
     switch (tag)
     {
-        case EnemyTag::DRONE:
-
+        case (EnemyTag::DRONE):
+        {
             AddMoveComponent(registry, enemy, Vector2{0, 0}, Vector2{0, 1}, -120.0f * GetFrameTime());
+            auto* moveComponent = registry.try_get<MoveComponent>(enemy);
+            if(moveComponent) moveComponent->speedMultiplier = 80.0f;
+
             AddTextureComponent(registry, enemy, "game/assets/textures/nitwBridge.png", Vector2{80.0f, 50.0f}, Vector2{80.0f, 0.0f});
             AddCustomComponent<GameTag>(registry, enemy, GameTag::ENEMY);
             AddCustomComponent<GunComponent>(registry, enemy);
             break;
+        }
         
         default:
+        {
             break;
+        }
     }
 
     return enemy;
@@ -76,6 +82,17 @@ void PlayerUpdate(entt::registry &registry)
                 {
                     timer->currentTime = timer->startTime;
                     CreateBulletEntity(registry, BulletType::STANDARD, moveComponent.position);
+                }
+            }
+
+            if(input.arrowUp)
+            {
+                auto* timer = registry.try_get<TimerComponent>(entity);
+
+                if(timer && timer->currentTime <= 0)
+                {
+                    timer->currentTime = timer->startTime;
+                    CreateEnemyEntity(registry, EnemyTag::DRONE);
                 }
             }
         }
