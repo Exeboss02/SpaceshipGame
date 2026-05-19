@@ -122,7 +122,7 @@ void EnemyUpdate(entt::registry& registry)
             auto* collider = registry.try_get<BoxColliderComponent>(enemy);
             auto* otherCollider = registry.try_get<BoxColliderComponent>(collider->hitEntity);
             
-            if(collider->inCollision || otherCollider->inCollision)
+            if(collider->inCollision)
             {
                 // std::cout << "ENEMY WAS HIT!!!!!!!!" << std::endl;
                 // std::cout << "From EnemyUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;

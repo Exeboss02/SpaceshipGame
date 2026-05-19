@@ -2,20 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C++ (GDB) - Debug",
-            "type": "cppdbg",
+            "name": "C++ (Windows) - Debug (MSVC)",
+            "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/SpaceshipGame",
+            "program": "${workspaceFolder}/build/Debug/SpaceshipGame.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "console": "integratedTerminal",  // or "integratedTerminal"
+            "windows": {
+                "miDebuggerPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Bin\\amd64\\vsdbg.exe"
+            },
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
+                    "description": "Enable pretty-printing for vsdbg",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }

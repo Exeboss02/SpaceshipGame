@@ -1,6 +1,18 @@
 #include "../headers/entities.h"
 
-void DrawTextureComponents(entt::registry& registry)
+//fix this for cross-platform later. windows.h sucks by the way
+std::string GetExecutablePath()
+{
+    //return std::filesystem::canonical("/proc/self/exe").parent_path();
+    // char* path = {};
+    // GetModuleFileNameA(NULL, path, 256);
+    // std::string outPath = path;
+
+    // return outPath;
+    return std::string{};
+}
+
+void DrawTextureComponents(entt::registry &registry)
 {
     auto view = registry.view<TextureComponent>();
     for (auto [entity, textureComponent] : view.each())
@@ -168,7 +180,8 @@ lua_State *LuaSetup()
     // getcwd(cwd, sizeof(cwd));
     // std::cout << "Current working directory: " << cwd << std::endl;
 
-    int result = luaL_dofile(L, GetExecutablePath() + "../game/lua/test.lua");
+    std::string luaPath = "game/lua/test.lua";
+    int result = luaL_dofile(L, luaPath.c_str());
     // Check for errors
     if (result != LUA_OK) {
         std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <raylib.h>
 #include <lua.hpp>
-#include <filesystem>
 
 #include "../headers/resourceStorage.h"
 
@@ -44,11 +43,7 @@ struct BoxColliderComponent
     entt::entity hitEntity = {};
 };
 
-std::string GetExecutablePath()
-{
-    return std::filesystem::canonical("/proc/self/exe").parent_path();
-    //Windows: GetModuleFileNameA(NULL, path, MAX_PATH);
-}
+std::string GetExecutablePath();
 
 
 //Rendering and textures
