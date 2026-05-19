@@ -51,7 +51,7 @@ entt::entity CreateBulletEntity(entt::registry &registry, BulletType bulletType,
             if(moveComponent) moveComponent->speedMultiplier = -800.0f;
 
             AddBoxColliderComponent(registry, bullet, position, Vector2{80.0f, 50.0f});
-            AddCustomComponent<DamageComponent>(registry, bullet, 11.0f);
+            AddCustomComponent<DamageComponent>(registry, bullet, 6.0f);
             break;
         }
 
@@ -124,8 +124,8 @@ void EnemyUpdate(entt::registry& registry)
             
             if(collider->inCollision || otherCollider->inCollision)
             {
-                std::cout << "ENEMY WAS HIT!!!!!!!!" << std::endl;
-                std::cout << "From EnemyUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;
+                // std::cout << "ENEMY WAS HIT!!!!!!!!" << std::endl;
+                // std::cout << "From EnemyUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;
 
                 auto* hitEntityTag = registry.try_get<GameTag>(collider->hitEntity);
                 auto* damageComponent = registry.try_get<DamageComponent>(collider->hitEntity);

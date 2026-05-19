@@ -1,5 +1,4 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 void DrawTextureComponents(entt::registry& registry)
 {
@@ -158,4 +157,26 @@ void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEnti
 {
     auto* timer = registry.try_get<TimerComponent>(timerHoldingEntity);
     if(timer) timer->currentTime = timer->startTime;
+}
+
+lua_State *LuaSetup()
+{
+    lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+
+    // char cwd[1024];
+    // getcwd(cwd, sizeof(cwd));
+    // std::cout << "Current working directory: " << cwd << std::endl;
+
+    int result = luaL_dofile(L, GetExecutablePath() + "../game/lua/test.lua");
+    // Check for errors
+    if (result != LUA_OK) {
+        std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
+        return L;
+    }
+
+    std::cout << "LUA RESULTAT: " << lua_gettop(L) << std::endl;
+    lua_pop(L, 0);
+
+    return L;
 }

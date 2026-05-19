@@ -2,6 +2,8 @@
 #include <type_traits>
 #include <iostream>
 #include <raylib.h>
+#include <lua.hpp>
+#include <filesystem>
 
 #include "../headers/resourceStorage.h"
 
@@ -42,6 +44,13 @@ struct BoxColliderComponent
     entt::entity hitEntity = {};
 };
 
+std::string GetExecutablePath()
+{
+    return std::filesystem::canonical("/proc/self/exe").parent_path();
+    //Windows: GetModuleFileNameA(NULL, path, MAX_PATH);
+}
+
+
 //Rendering and textures
 void DrawTextureComponents(entt::registry& registry);
 TextureContainer* GetTexture(std::string path);
@@ -57,3 +66,5 @@ void UpdateColliderComponents(entt::registry& registry);
 void UpdateMoveComponents(entt::registry& registry);
 void UpdateTimerComponents(entt::registry& registry);
 void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);
+
+lua_State* LuaSetup();
