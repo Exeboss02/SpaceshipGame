@@ -120,11 +120,12 @@ void EnemyUpdate(entt::registry& registry)
 
             //Collision
             auto* collider = registry.try_get<BoxColliderComponent>(enemy);
-            //std::cout << collider->inCollision << std::endl;
+            auto* otherCollider = registry.try_get<BoxColliderComponent>(collider->hitEntity);
             
-            if(collider->inCollision)
+            if(collider->inCollision || otherCollider->inCollision)
             {
                 std::cout << "ENEMY WAS HIT!!!!!!!!" << std::endl;
+                std::cout << "From EnemyUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;
 
                 auto* hitEntityTag = registry.try_get<GameTag>(collider->hitEntity);
                 auto* damageComponent = registry.try_get<DamageComponent>(collider->hitEntity);
@@ -166,13 +167,7 @@ void BulletUpdate(entt::registry &registry)
                 auto* hitTag = registry.try_get<GameTag>(collider->hitEntity);
 
                 auto* otherCollider = registry.try_get<BoxColliderComponent>(collider->hitEntity);
-                std::cout << "From BulletUpdate: " << collider->inCollision << ", " << otherCollider->inCollision << std::endl;
 
-                if(hitTag && *hitTag != GameTag::PLAYER)
-                {
-                    registry.destroy(entity);
-                    registry.destroy(collider->hitEntity);
-                }
             }
         }
     }

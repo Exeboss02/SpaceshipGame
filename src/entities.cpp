@@ -91,32 +91,37 @@ void UpdateInputComponents(entt::registry &registry)
 }
 
 void UpdateColliderComponents(entt::registry &registry)
-{    
-    //may do AB and BA collision checks, but I'm not sure if I have time to optimize
+{
+    //max nr of colliders is 256, this is not very clean but I have to put colliders in
+    //a contigous array somehow, and I don't have a class to store the array in because of ecs.
+    static BoxColliderComponent* colliders[256] = {};
+    static entt::entity entities[256] = {};
+
     auto view = registry.view<BoxColliderComponent>();
-    for (auto [aEntity, aCollider] : view.each())
+    int index = 0;
+    for (auto [entity, collider] : view.each())
     {
-        for (auto [bEntity, bCollider] : view.each())
+        entities[index] = entity;
+        colliders[index] = &collider;
+        colliders[index]->inCollision = false;
+        index++;
+    }
+
+    for (int i = 0; i < view.size(); i++)
+    {
+        for(int j = i + 1; j < view.size(); j++)
         {
-            if(aEntity != bEntity)
+            if(CheckCollisionRecs(colliders[i]->rectangle, colliders[j]->rectangle))
             {
-                if(CheckCollisionRecs(aCollider.rectangle, bCollider.rectangle))
-                {
-                    aCollider.inCollision = true;
-                    aCollider.hitEntity = bEntity;
+                colliders[i]->inCollision = true;
+                colliders[i]->hitEntity = entities[j];
 
-                    bCollider.inCollision = true;
-                    bCollider.hitEntity = aEntity;
-                }
-
-                else
-                {
-                    aCollider.inCollision = false;
-                    bCollider.inCollision = false;
-                }
+                colliders[j]->inCollision = true;
+                colliders[j]->hitEntity = entities[i];
             }
         }
     }
+    
 }
 
 void UpdateMoveComponents(entt::registry &registry)

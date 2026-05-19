@@ -10,6 +10,7 @@ file(GLOB SOURCES
 )
 
 # Add the executable
+set(CMAKE_BUILD_TYPE Debug)
 add_executable(SpaceshipGame ${SOURCES})
 
 # Detect the operating system
