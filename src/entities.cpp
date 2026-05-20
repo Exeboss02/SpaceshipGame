@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -45,6 +46,71 @@ TextureContainer* GetTexture(std::string path)
 
     return texture;
 }
+
+//----------------------STATIC-LUA-FUNCTIONS---------------------------------------------------------
+
+int lua_AddMoveComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    float posX = static_cast<float>(lua_tonumber(L, 2));
+    float posY = static_cast<float>(lua_tonumber(L, 3));
+    float velX = static_cast<float>(lua_tonumber(L, 4));
+    float velY = static_cast<float>(lua_tonumber(L, 5));
+    float speed = static_cast<float>(lua_tonumber(L, 6));
+
+    AddMoveComponent(registry, entity, Vector2{posX, posY}, Vector2{velX, velY}, speed);
+
+    return 0;
+}
+
+int lua_AddTextureComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    std::string texturePath = static_cast<std::string>(lua_tostring(L, 2));
+    float posX = static_cast<float>(lua_tonumber(L, 3));
+    float posY = static_cast<float>(lua_tonumber(L, 4));
+    float sizeX = static_cast<float>(lua_tonumber(L, 5));
+    float sizeY = static_cast<float>(lua_tonumber(L, 6));
+
+    AddTextureComponent(registry, entity, texturePath, Vector2{sizeX, sizeY}, Vector2{posX, posY});
+    return 0;
+}
+
+int lua_AddInputComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+
+    AddInputComponent(registry, entity);
+    return 0;
+}
+
+int lua_AddTimerComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    float startTime = static_cast<float>(lua_tonumber(L, 2));
+
+    AddTimerComponent(registry, entity, startTime);
+    return 0;
+}
+
+int lua_AddBoxColliderComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    float posX = static_cast<float>(lua_tonumber(L, 2));
+    float posY = static_cast<float>(lua_tonumber(L, 3));
+    float sizeX = static_cast<float>(lua_tonumber(L, 4));
+    float sizeY = static_cast<float>(lua_tonumber(L, 5));
+
+    AddBoxColliderComponent(registry, entity, Vector2{posX, posY}, Vector2{sizeX, sizeY});
+    return 0;
+}
+
+//-------------------------------------C++-Add-Components---------------------------------------------------------------
 
 void AddInputComponent(entt::registry& registry, entt::entity& entity)
 {
@@ -171,25 +237,33 @@ void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEnti
     if(timer) timer->currentTime = timer->startTime;
 }
 
+entt::registry &GetRegistry()
+{
+    static entt::registry registry;
+    return registry;
+}
+
 lua_State *LuaSetup()
 {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
 
-    // char cwd[1024];
-    // getcwd(cwd, sizeof(cwd));
-    // std::cout << "Current working directory: " << cwd << std::endl;
+    lua_pushcfunction(L, lua_AddMoveComponent);
+    lua_pushcfunction(L, lua_AddTextureComponent);
+    lua_pushcfunction(L, lua_AddInputComponent);
+    lua_pushcfunction(L, lua_AddTimerComponent);
+    lua_pushcfunction(L, lua_AddBoxColliderComponent);
 
-    std::string luaPath = "game/lua/test.lua";
-    int result = luaL_dofile(L, luaPath.c_str());
-    // Check for errors
-    if (result != LUA_OK) {
-        std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
-        return L;
-    }
+    // std::string luaPath = "game/lua/test.lua";
+    // int result = luaL_dofile(L, luaPath.c_str());
+    // // Check for errors
+    // if (result != LUA_OK) {
+    //     std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
+    //     return L;
+    // }
 
-    std::cout << "LUA RESULTAT: " << lua_gettop(L) << std::endl;
-    lua_pop(L, 0);
+    // std::cout << "LUA RESULTAT: " << lua_gettop(L) << std::endl;
+    // lua_pop(L, 0);
 
     return L;
 }

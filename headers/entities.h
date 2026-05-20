@@ -50,6 +50,12 @@ std::string GetExecutablePath();
 void DrawTextureComponents(entt::registry& registry);
 TextureContainer* GetTexture(std::string path);
 
+int lua_AddMoveComponent(lua_State* L);
+int lua_AddTextureComponent(lua_State* L);
+int lua_AddInputComponent(lua_State* L);
+int lua_AddTimerComponent(lua_State* L);
+int lua_AddBoxColliderComponent(lua_State* L);
+
 void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 velocity, float speedMultiplier);
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);
 void AddInputComponent(entt::registry& registry, entt::entity& entity);
@@ -62,4 +68,5 @@ void UpdateMoveComponents(entt::registry& registry);
 void UpdateTimerComponents(entt::registry& registry);
 void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);
 
-lua_State* LuaSetup();
+entt::registry& GetRegistry();
+lua_State *LuaSetup();

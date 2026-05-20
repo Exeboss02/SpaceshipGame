@@ -18,7 +18,7 @@ int main(void)
     // Create a Lua state
     lua_State* L = LuaSetup();
 
-    entt::registry registry;
+    entt::registry& registry = GetRegistry();
     CreateGameEntities(registry);
 
     // Main game loop
