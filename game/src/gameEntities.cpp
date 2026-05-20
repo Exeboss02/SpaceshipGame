@@ -1,9 +1,102 @@
 #include "../game/headers/gameEntities.h"
+#include "gameEntities.h"
 
 template<typename T, typename... Args>
 void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
 {
     registry.emplace<T>(entity, std::forward<Args>(args)...);
+}
+
+int lua_AddCustomComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    std::string type = lua_tostring(L, 2);
+
+    if(type == ("GameTag"))
+    {
+        std::string tag = lua_tostring(L, 3);
+
+        if(tag == "ENEMY" || tag == "Enemy")
+        {
+            AddCustomComponent<GameTag>(registry, entity, GameTag::ENEMY);
+        }
+        else if(tag == "PLAYER" || tag == "Player")
+        {
+            AddCustomComponent<GameTag>(registry, entity, GameTag::PLAYER);
+        }
+        else if(tag == "GUN" || tag == "Gun")
+        {
+            AddCustomComponent<GameTag>(registry, entity, GameTag::GUN);
+        }
+        else if(tag == "BULLET" || tag == "Bullet")
+        {
+            AddCustomComponent<GameTag>(registry, entity, GameTag::BULLET);
+        }
+    }
+
+    else if(type == ("EnemyTag"))
+    {
+        std::string tag = lua_tostring(L, 3);
+
+        if(tag == "DRONE" || tag == "Drone")
+        {
+            AddCustomComponent<EnemyTag>(registry, entity, EnemyTag::DRONE);
+        }
+    }
+
+    else if(type == ("BulletType"))
+    {
+        std::string tag = lua_tostring(L, 3);
+
+        if(tag == "STANDARD" || tag == "Standard")
+        {
+            AddCustomComponent<BulletType>(registry, entity, BulletType::STANDARD);
+        }
+    }
+
+    else if(type == ("BulletPattern"))
+    {
+        std::string tag = lua_tostring(L, 3);
+
+        if(tag == "STRAIGHT" || tag == "Straight")
+        {
+            AddCustomComponent<BulletPattern>(registry, entity, BulletPattern::STRAIGHT);
+        }
+    }
+
+    else if(type == ("GunComponent"))
+    {
+        float shootCoolDown = static_cast<float>(lua_tonumber(L, 3));
+        float spreadFactor = static_cast<float>(lua_tonumber(L, 4));
+
+        AddCustomComponent<GunComponent>(registry, entity, shootCoolDown, spreadFactor);
+    }
+
+    else if(type == ("HealthComponent"))
+    {
+        float hp = static_cast<float>(lua_tonumber(L, 3));
+
+        AddCustomComponent<HealthComponent>(registry, entity, hp);
+    }
+
+    else if(type == ("DamageComponent"))
+    {
+        float damage = static_cast<float>(lua_tonumber(L, 3));
+
+        AddCustomComponent<DamageComponent>(registry, entity, damage);
+    }
+    
+    if (!lua_istable(L, 2))
+    {
+        return luaL_error(L, "Expected a table as second argument");
+    }
+}
+
+void GameLuaSetup(lua_State *L)
+{
+    lua_pushcfunction(L, lua_AddCustomComponent);
+    lua_setglobal(L, "AddCustomComponent");
 }
 
 entt::entity CreateEnemyEntity(entt::registry &registry, EnemyTag tag)
@@ -177,14 +270,5 @@ void BulletUpdate(entt::registry &registry)
 
 void CreateGameEntities(entt::registry& registry)
 {
-    entt::entity player = registry.create();
-    AddMoveComponent(registry, player, Vector2{100.0f, 80.0f}, Vector2{0, 0}, 125.0f);
-    AddTextureComponent(registry, player, "game/assets/textures/HumanoidTpose.png", Vector2{160.0f, 80.0f}, Vector2{150.0f, 80.0f});
-    AddInputComponent(registry, player);
-    AddTimerComponent(registry, player, 0.5f);
-    AddBoxColliderComponent(registry, player, Vector2(100, 100), Vector2{160.0f, 80.0f});
-    AddCustomComponent<GameTag>(registry, player, GameTag::PLAYER);
-    AddCustomComponent<GunComponent>(registry, player);
-
-    CreateEnemyEntity(registry, EnemyTag::DRONE);
+    //CreateEnemyEntity(registry, EnemyTag::DRONE);
 }

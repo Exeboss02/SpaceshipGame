@@ -1,5 +1,4 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -48,6 +47,16 @@ TextureContainer* GetTexture(std::string path)
 }
 
 //----------------------STATIC-LUA-FUNCTIONS---------------------------------------------------------
+
+int lua_CreateEntity(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = registry.create();
+
+    lua_pushinteger(L, static_cast<int>(entity));
+
+    return 1;
+}
 
 int lua_AddMoveComponent(lua_State *L)
 {
@@ -248,11 +257,18 @@ lua_State *LuaSetup()
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
 
+    lua_pushcfunction(L, lua_CreateEntity);
+    lua_setglobal(L, "CreateEntity");
     lua_pushcfunction(L, lua_AddMoveComponent);
+    lua_setglobal(L, "AddMoveComponent");
     lua_pushcfunction(L, lua_AddTextureComponent);
+    lua_setglobal(L, "AddTextureComponent");
     lua_pushcfunction(L, lua_AddInputComponent);
+    lua_setglobal(L, "AddInputComponent");
     lua_pushcfunction(L, lua_AddTimerComponent);
+    lua_setglobal(L, "AddTimerComponent");
     lua_pushcfunction(L, lua_AddBoxColliderComponent);
+    lua_setglobal(L, "AddBoxColliderComponent");
 
     // std::string luaPath = "game/lua/test.lua";
     // int result = luaL_dofile(L, luaPath.c_str());

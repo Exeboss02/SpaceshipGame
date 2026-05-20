@@ -25,7 +25,7 @@ struct MoveComponent
 {
     Vector2 position = {};
     Vector2 velocity = {};
-    float speedMultiplier = 1.0f;
+    float speedMultiplier = -10.0f;
 };
 
 struct InputComponent
@@ -50,6 +50,7 @@ std::string GetExecutablePath();
 void DrawTextureComponents(entt::registry& registry);
 TextureContainer* GetTexture(std::string path);
 
+int lua_CreateEntity(lua_State* L);
 int lua_AddMoveComponent(lua_State* L);
 int lua_AddTextureComponent(lua_State* L);
 int lua_AddInputComponent(lua_State* L);
