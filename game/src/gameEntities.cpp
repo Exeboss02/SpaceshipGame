@@ -284,7 +284,4 @@ void BulletUpdate(entt::registry &registry)
 
 void CreateGameEntities(entt::registry& registry)
 {
-    // entt::entity background = registry.create();
-    // AddTextureComponent(registry, background, "game/assets/textures/space.png", Vector2{1920.0f, 1080.0f}, Vector2{0.0f, 0.0f});
-    // AddCustomComponent<BackgroundComponent>(registry, background, 19.0f);
 }

@@ -39,9 +39,9 @@ int main(void)
             UpdateTimerComponents(registry);
             UpdateColliderComponents(registry);
 
-            PlayerUpdate(registry);
-            EnemyUpdate(registry);
-            BulletUpdate(registry);
+            // PlayerUpdate(registry);
+            // EnemyUpdate(registry);
+            // BulletUpdate(registry);
 
             luaL_dofile(L, "game/lua/update.lua");
             //std::cout << lua_gettop(L) << std::endl;

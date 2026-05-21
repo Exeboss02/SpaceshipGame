@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -144,6 +145,30 @@ int lua_GetInputValues(lua_State *L)
     }
 
     return 4;
+}
+
+int lua_GetDeltaTime(lua_State *L)
+{
+    lua_pushnumber(L, GetFrameTime());
+    return 1;
+}
+
+int lua_SetMoveComponentVelocity(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    float velX = static_cast<float>(lua_tonumber(L, 2));
+    float velY = static_cast<float>(lua_tonumber(L, 3));
+
+    auto* moveComponent = registry.try_get<MoveComponent>(entity);
+    if(moveComponent)
+    {
+        moveComponent->velocity = Vector2{velX, velY};
+    }
+    
+    //speed scaler will only be in lua from now on
+
+    return 0;
 }
 //-------------------------------------C++-Add-Components---------------------------------------------------------------
 
@@ -320,6 +345,10 @@ lua_State *LuaSetup()
 
     lua_pushcfunction(L, lua_GetInputValues);
     lua_setglobal(L, "GetInputValues");
+    lua_pushcfunction(L, lua_GetDeltaTime);
+    lua_setglobal(L, "GetDeltaTime");
+    lua_pushcfunction(L, lua_SetMoveComponentVelocity);
+    lua_setglobal(L, "SetMoveComponentVelocity");
 
     // std::string luaPath = "game/lua/test.lua";
     // int result = luaL_dofile(L, luaPath.c_str());

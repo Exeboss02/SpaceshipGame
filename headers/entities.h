@@ -64,6 +64,18 @@ int lua_AddBoxColliderComponent(lua_State* L);
 int lua_GetInputValues(lua_State* L);
 int lua_GetDeltaTime(lua_State* L);
 
+int lua_GetMoveComponent(lua_State* L);
+int lua_GetTextureComponent(lua_State* L);
+int lua_GetInputComponent(lua_State* L);
+int lua_GetTimerComponent(lua_State* L);
+int lua_GetBoxColliderComponent(lua_State* L);
+
+int lua_SetMoveComponentVelocity(lua_State* L);
+int lua_SetTextureComponent(lua_State* L);
+int lua_SetInputComponent(lua_State* L);
+int lua_SetTimerComponent(lua_State* L);
+int lua_SetBoxColliderComponent(lua_State* L);
+
 void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 velocity, float speedMultiplier);
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);
 void AddInputComponent(entt::registry& registry, entt::entity& entity);

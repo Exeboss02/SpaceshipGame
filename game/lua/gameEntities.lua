@@ -7,7 +7,7 @@ end
 
 function CreatePlayer(posX, posY)
     player = CreateEntity()
-    AddMoveComponent(player, posX, posY, 0, 0, 125)
+    AddMoveComponent(player, posX, posY, 0, 0, 0) --speed doesn't matter here
     AddTextureComponent(player, "game/assets/textures/HumanoidTpose.png", posX, posY, 150, 80)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
@@ -20,7 +20,7 @@ end
 
 function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
-    AddMoveComponent(drone, posX, posY, 0, 0, 40.0)
+    AddMoveComponent(drone, posX, posY, 0, 0, 1040.0)
     AddTextureComponent(drone, "game/assets/textures/nitwBridge.png", posX, posY, 120, 80)
     AddBoxColliderComponent(drone, posX, posY, 80, 50)
     AddCustomComponent(drone, "GameTag", "ENEMY")
