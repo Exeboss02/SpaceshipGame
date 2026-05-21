@@ -33,6 +33,8 @@ int lua_AddCustomComponent(lua_State *L)
         {
             AddCustomComponent<GameTag>(registry, entity, GameTag::BULLET);
         }
+
+        return 3;
     }
 
     else if(type == ("EnemyTag"))
@@ -43,6 +45,7 @@ int lua_AddCustomComponent(lua_State *L)
         {
             AddCustomComponent<EnemyTag>(registry, entity, EnemyTag::DRONE);
         }
+        return 3;
     }
 
     else if(type == ("BulletType"))
@@ -53,6 +56,7 @@ int lua_AddCustomComponent(lua_State *L)
         {
             AddCustomComponent<BulletType>(registry, entity, BulletType::STANDARD);
         }
+        return 3;
     }
 
     else if(type == ("BulletPattern"))
@@ -63,6 +67,7 @@ int lua_AddCustomComponent(lua_State *L)
         {
             AddCustomComponent<BulletPattern>(registry, entity, BulletPattern::STRAIGHT);
         }
+        return 3;
     }
 
     else if(type == ("GunComponent"))
@@ -71,6 +76,7 @@ int lua_AddCustomComponent(lua_State *L)
         float spreadFactor = static_cast<float>(lua_tonumber(L, 4));
 
         AddCustomComponent<GunComponent>(registry, entity, shootCoolDown, spreadFactor);
+        return 4;
     }
 
     else if(type == ("HealthComponent"))
@@ -78,6 +84,7 @@ int lua_AddCustomComponent(lua_State *L)
         float hp = static_cast<float>(lua_tonumber(L, 3));
 
         AddCustomComponent<HealthComponent>(registry, entity, hp);
+        return 3;
     }
 
     else if(type == ("DamageComponent"))
@@ -85,12 +92,10 @@ int lua_AddCustomComponent(lua_State *L)
         float damage = static_cast<float>(lua_tonumber(L, 3));
 
         AddCustomComponent<DamageComponent>(registry, entity, damage);
+        return 3;
     }
-    
-    if (!lua_istable(L, 2))
-    {
-        return luaL_error(L, "Expected a table as second argument");
-    }
+
+    return 2;
 }
 
 void GameLuaSetup(lua_State *L)

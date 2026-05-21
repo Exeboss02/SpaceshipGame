@@ -5,4 +5,9 @@ if not success then
 end
 
 CreatePlayer(100, 40)
---CreateEnemyDrone(500, 40)
+
+CreateEnemyDrone(200, 40)
+CreateEnemyDrone(300, 80)
+CreateEnemyDrone(400, 120)
+CreateEnemyDrone(500, 160)
+CreateEnemyDrone(600, 200)
