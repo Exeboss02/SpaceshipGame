@@ -24,6 +24,7 @@ function CreateEnemyDrone(posX, posY)
     return drone
 end
 
+--will probably not be used
 function ReadInput(entity)
     local arrowUp, shootButton, xInput, yInput = GetInputValues(entity)
 

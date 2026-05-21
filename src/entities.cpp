@@ -1,5 +1,4 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -18,6 +17,9 @@ void DrawTextureComponents(entt::registry &registry)
     auto view = registry.view<TextureComponent>();
     for (auto [entity, textureComponent] : view.each())
     {
+        auto* isBackground = registry.try_get<BackgroundComponent>(entity);
+        if(isBackground) continue;
+
         //this is so that source texture can have different sizes depending on which entity
         textureComponent.textureContainer->texture.width = textureComponent.size.x;
         textureComponent.textureContainer->texture.height = textureComponent.size.y;
@@ -268,6 +270,25 @@ void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEnti
 {
     auto* timer = registry.try_get<TimerComponent>(timerHoldingEntity);
     if(timer) timer->currentTime = timer->startTime;
+}
+
+void DrawBackground(entt::registry &registry)
+{
+    float deltaTime = GetFrameTime();
+    static float offsetY = 0;
+
+    auto view = registry.view<TextureComponent, BackgroundComponent>();
+    for (auto [entity, textureComponent, backgroundComponent] : view.each())
+    {
+        offsetY += backgroundComponent.scrollSpeed * deltaTime;
+        if(offsetY >= textureComponent.size.y)
+        {
+            offsetY = 0;
+        }
+
+        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY}, 0.0f, 2.0f, WHITE);
+        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY + textureComponent.size.y}, 0.0f, 1.0f, WHITE);
+    }
 }
 
 entt::registry &GetRegistry()

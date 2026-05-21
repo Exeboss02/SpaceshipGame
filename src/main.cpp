@@ -45,9 +45,9 @@ int main(void)
 
             luaL_dofile(L, "game/lua/update.lua");
             //std::cout << lua_gettop(L) << std::endl;
-            //lua_pop(L, 0);
 
             UpdateMoveComponents(registry);
+            DrawBackground(registry);
             DrawTextureComponents(registry);
 
         EndDrawing();

@@ -1,5 +1,4 @@
 #include "../game/headers/gameEntities.h"
-#include "gameEntities.h"
 
 template<typename T, typename... Args>
 void AddCustomComponent(entt::registry& registry, entt::entity entity, Args&&... args)
@@ -94,6 +93,14 @@ int lua_AddCustomComponent(lua_State *L)
         float damage = static_cast<float>(lua_tonumber(L, 3));
 
         AddCustomComponent<DamageComponent>(registry, entity, damage);
+        return 3;
+    }
+
+    else if(type == ("BackgroundComponent"))
+    {
+        float scrollSpeed = static_cast<float>(lua_tonumber(L, 3));
+
+        AddCustomComponent<BackgroundComponent>(registry, entity, scrollSpeed);
         return 3;
     }
 
@@ -277,5 +284,7 @@ void BulletUpdate(entt::registry &registry)
 
 void CreateGameEntities(entt::registry& registry)
 {
-    //CreateEnemyEntity(registry, EnemyTag::DRONE);
+    entt::entity background = registry.create();
+    AddTextureComponent(registry, background, "game/assets/textures/space.png", Vector2{40.0f, 25.0f}, Vector2{0.0f, 0.0f});
+    AddCustomComponent<BackgroundComponent>(registry, background, 19.0f);
 }
