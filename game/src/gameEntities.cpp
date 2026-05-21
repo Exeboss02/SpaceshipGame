@@ -13,6 +13,8 @@ int lua_AddCustomComponent(lua_State *L)
     entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
     std::string type = lua_tostring(L, 2);
 
+    //do I really need to return values > 0 here?
+
     if(type == ("GameTag"))
     {
         std::string tag = lua_tostring(L, 3);

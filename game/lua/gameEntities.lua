@@ -8,6 +8,8 @@ function CreatePlayer(posX, posY)
     AddBoxColliderComponent(player, posX, posY, 160, 80)
     AddCustomComponent(player, "GameTag", "PLAYER")
     AddCustomComponent(player, "GunComponent", 0.01, 0.0)
+
+    return player
 end
 
 function CreateEnemyDrone(posX, posY)
@@ -18,4 +20,19 @@ function CreateEnemyDrone(posX, posY)
     AddCustomComponent(drone, "GameTag", "ENEMY")
     AddCustomComponent(drone, "GunComponent", 0.01, 0.0)
     AddCustomComponent(drone, "HealthComponent", 10.0)
+
+    return drone
 end
+
+function ReadInput(entity)
+    local arrowUp, shootButton, xInput, yInput = GetInputValues(entity)
+
+    table = {}
+    table["arrowUp"] = arrowUp
+    table["shootButton"] = shootButton
+    table["xInput"] = xInput
+    table["yInput"] = yInput
+
+    return table
+end
+

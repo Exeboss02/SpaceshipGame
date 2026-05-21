@@ -4,7 +4,7 @@ if not success then
     return
 end
 
-CreatePlayer(100, 40)
+player = CreatePlayer(100, 40)
 
 CreateEnemyDrone(200, 40)
 CreateEnemyDrone(300, 80)

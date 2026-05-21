@@ -43,6 +43,10 @@ int main(void)
             EnemyUpdate(registry);
             BulletUpdate(registry);
 
+            luaL_dofile(L, "game/lua/update.lua");
+            //std::cout << lua_gettop(L) << std::endl;
+            //lua_pop(L, 0);
+
             UpdateMoveComponents(registry);
             DrawTextureComponents(registry);
 

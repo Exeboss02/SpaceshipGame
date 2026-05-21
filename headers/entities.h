@@ -56,6 +56,7 @@ int lua_AddTextureComponent(lua_State* L);
 int lua_AddInputComponent(lua_State* L);
 int lua_AddTimerComponent(lua_State* L);
 int lua_AddBoxColliderComponent(lua_State* L);
+int lua_GetInputValues(lua_State* L);
 
 void AddMoveComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 velocity, float speedMultiplier);
 bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::string texturePath, Vector2 size, Vector2 position);

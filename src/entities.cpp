@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -119,6 +120,29 @@ int lua_AddBoxColliderComponent(lua_State *L)
     return 0;
 }
 
+int lua_GetInputValues(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    auto* input = registry.try_get<InputComponent>(entity);
+
+    if(input)
+    {
+        lua_pushboolean(L, input->arrowUp);
+        lua_pushboolean(L, input->shootButton);
+        lua_pushnumber(L, input->xInput);
+        lua_pushnumber(L, input->yInput);
+    }
+    else
+    {
+        lua_pushnil(L);
+        lua_pushnil(L);
+        lua_pushnil(L);
+        lua_pushnil(L);
+    }
+
+    return 4;
+}
 //-------------------------------------C++-Add-Components---------------------------------------------------------------
 
 void AddInputComponent(entt::registry& registry, entt::entity& entity)
@@ -269,6 +293,9 @@ lua_State *LuaSetup()
     lua_setglobal(L, "AddTimerComponent");
     lua_pushcfunction(L, lua_AddBoxColliderComponent);
     lua_setglobal(L, "AddBoxColliderComponent");
+
+    lua_pushcfunction(L, lua_GetInputValues);
+    lua_setglobal(L, "GetInputValues");
 
     // std::string luaPath = "game/lua/test.lua";
     // int result = luaL_dofile(L, luaPath.c_str());
