@@ -280,14 +280,17 @@ void DrawBackground(entt::registry &registry)
     auto view = registry.view<TextureComponent, BackgroundComponent>();
     for (auto [entity, textureComponent, backgroundComponent] : view.each())
     {
+        textureComponent.textureContainer->texture.width = textureComponent.size.x;
+        textureComponent.textureContainer->texture.height = textureComponent.size.y;
+
         offsetY += backgroundComponent.scrollSpeed * deltaTime;
         if(offsetY >= textureComponent.size.y)
         {
             offsetY = 0;
         }
 
-        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY}, 0.0f, 2.0f, WHITE);
-        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY + textureComponent.size.y}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(textureComponent.textureContainer->texture, Vector2{0, offsetY - textureComponent.size.y}, 0.0f, 1.0f, WHITE);
     }
 }
 

@@ -1,4 +1,10 @@
 
+function CreateBackground(texturePath, scrollSpeed)
+    background = CreateEntity()
+    AddTextureComponent(background, texturePath, 0, 0, 1920, 1080)
+    AddCustomComponent(background, "BackgroundComponent", scrollSpeed)
+end
+
 function CreatePlayer(posX, posY)
     player = CreateEntity()
     AddMoveComponent(player, posX, posY, 0, 0, 125)

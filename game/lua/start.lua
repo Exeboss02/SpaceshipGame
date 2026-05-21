@@ -4,6 +4,8 @@ if not success then
     return
 end
 
+CreateBackground("game/assets/textures/space.png", 55.0)
+
 player = CreatePlayer(100, 40)
 
 CreateEnemyDrone(200, 40)
