@@ -33,18 +33,12 @@ int main(void)
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawText("Hello, Raylib!", 190, 200, 20, BLACK);
-            //DrawRectangle(200, 100, 400, 250, customColor);
+
+            UpdateGameSystems(registry, L);
 
             UpdateInputComponents(registry);
             UpdateTimerComponents(registry);
             UpdateColliderComponents(registry);
-
-            // PlayerUpdate(registry);
-            // EnemyUpdate(registry);
-            // BulletUpdate(registry);
-
-            luaL_dofile(L, "game/lua/update.lua");
-            //std::cout << lua_gettop(L) << std::endl;
 
             UpdateMoveComponents(registry);
             DrawBackground(registry);

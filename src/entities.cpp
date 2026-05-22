@@ -1,5 +1,4 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -51,6 +50,16 @@ TextureContainer* GetTexture(std::string path)
 }
 
 //----------------------STATIC-LUA-FUNCTIONS---------------------------------------------------------
+
+int lua_ReferenceAndPushBehaviour(lua_State *L)
+{
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    std::string scriptPath = static_cast<std::string>(lua_tostring(L, 2));
+
+    ReferenceAndPushBehaviour(L, static_cast<int>(entity), scriptPath);
+
+    return 0;
+}
 
 int lua_CreateEntity(lua_State *L)
 {
@@ -123,6 +132,18 @@ int lua_AddBoxColliderComponent(lua_State *L)
     return 0;
 }
 
+int lua_AddGameSystemComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    std::string scriptPath = static_cast<std::string>(lua_tostring(L, 2));
+    int tableRef = ReferenceAndPushBehaviour(L, static_cast<int>(entity), scriptPath);
+
+    AddGameSystemComponent(registry, entity, scriptPath, tableRef);
+
+    return 0;
+}
+
 int lua_GetInputValues(lua_State *L)
 {
     entt::registry& registry = GetRegistry();
@@ -188,6 +209,11 @@ void AddBoxColliderComponent(entt::registry &registry, entt::entity &entity, Vec
     registry.emplace<BoxColliderComponent>(entity, rectangle, false);
 }
 
+void AddGameSystemComponent(entt::registry &registry, entt::entity &entity, std::string scriptPath, int luaReference)
+{
+    registry.emplace<GameSystemComponent>(entity, scriptPath, luaReference);
+}
+
 void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
 {
     registry.emplace<MoveComponent>(entity, position, velocity, speedMultiplier);
@@ -207,6 +233,23 @@ bool AddTextureComponent(entt::registry &registry, entt::entity &entity, std::st
 }
 
 //----------------------UPDATES----------------------------------------------------------------------------------------------------
+
+void UpdateGameSystems(entt::registry &registry, lua_State* L)
+{
+    auto view = registry.view<GameSystemComponent>();
+
+    view.each([&](GameSystemComponent& script)
+    {
+        lua_rawgeti(L, LUA_REGISTRYINDEX, script.luaTableReference);
+        lua_getfield(L, -1, "Update");
+        lua_pushvalue(L, -2);
+        if (lua_pcall(L, 1, 0, 0) != LUA_OK)
+        {
+            std::cout << "UpdateGameSystems failed!" << std::endl;
+        }
+        lua_pop(L, 1);
+    });
+}
 
 void UpdateInputComponents(entt::registry &registry)
 {
@@ -325,6 +368,27 @@ entt::registry &GetRegistry()
     return registry;
 }
 
+int ReferenceAndPushBehaviour(lua_State* L, int entity, std::string scriptPath)
+{
+    luaL_dofile(L, scriptPath.c_str());
+
+    lua_pushvalue(L, -1);
+    int luaTableRef = luaL_ref(L, LUA_REGISTRYINDEX);
+
+    lua_pushinteger(L, entity);
+    lua_setfield(L, -2, "ID");
+
+    lua_pushstring(L, scriptPath.c_str());
+    lua_setfield(L, -2, "path");
+
+    lua_getfield(L, -1, "Start");
+    lua_pushvalue(L, -2);
+    lua_pcall(L, 1, 0, 0);
+
+    //lua_pop(L, 1);
+    return luaTableRef;
+}
+
 lua_State *LuaSetup()
 {
     lua_State* L = luaL_newstate();
@@ -349,17 +413,10 @@ lua_State *LuaSetup()
     lua_setglobal(L, "GetDeltaTime");
     lua_pushcfunction(L, lua_SetMoveComponentVelocity);
     lua_setglobal(L, "SetMoveComponentVelocity");
-
-    // std::string luaPath = "game/lua/test.lua";
-    // int result = luaL_dofile(L, luaPath.c_str());
-    // // Check for errors
-    // if (result != LUA_OK) {
-    //     std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
-    //     return L;
-    // }
-
-    // std::cout << "LUA RESULTAT: " << lua_gettop(L) << std::endl;
-    // lua_pop(L, 0);
+    lua_pushcfunction(L, lua_AddGameSystemComponent);
+    lua_setglobal(L, "AddGameSystemComponent");
+    // lua_pushcfunction(L, lua_ReferenceAndPushBehaviour);
+    // lua_setglobal(L, "ReferenceAndPushBehaviour");
 
     return L;
 }

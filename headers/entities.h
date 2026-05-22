@@ -48,6 +48,12 @@ struct BoxColliderComponent
     entt::entity hitEntity = {};
 };
 
+struct GameSystemComponent
+{
+    std::string scriptPath = {};
+    int luaTableReference;
+};
+
 std::string GetExecutablePath();
 
 
@@ -55,12 +61,14 @@ std::string GetExecutablePath();
 void DrawTextureComponents(entt::registry& registry);
 TextureContainer* GetTexture(std::string path);
 
+int lua_ReferenceAndPushBehaviour(lua_State* L);
 int lua_CreateEntity(lua_State* L);
 int lua_AddMoveComponent(lua_State* L);
 int lua_AddTextureComponent(lua_State* L);
 int lua_AddInputComponent(lua_State* L);
 int lua_AddTimerComponent(lua_State* L);
 int lua_AddBoxColliderComponent(lua_State* L);
+int lua_AddGameSystemComponent(lua_State* L);
 int lua_GetInputValues(lua_State* L);
 int lua_GetDeltaTime(lua_State* L);
 
@@ -81,7 +89,10 @@ bool AddTextureComponent(entt::registry& registry, entt::entity& entity, std::st
 void AddInputComponent(entt::registry& registry, entt::entity& entity);
 void AddTimerComponent(entt::registry& registry, entt::entity& entity, float startTime);
 void AddBoxColliderComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 scale);
+void AddGameSystemComponent(entt::registry& registry, entt::entity& entity, std::string scriptPath, int luaReference);
 
+int ReferenceAndPushBehaviour(lua_State* L, int entity, std::string scriptPath);
+void UpdateGameSystems(entt::registry& registry, lua_State* L);
 void UpdateInputComponents(entt::registry& registry);
 void UpdateColliderComponents(entt::registry& registry);
 void UpdateMoveComponents(entt::registry& registry);

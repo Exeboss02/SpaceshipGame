@@ -5,8 +5,31 @@ function CreateBackground(texturePath, scrollSpeed)
     AddCustomComponent(background, "BackgroundComponent", scrollSpeed)
 end
 
+function CreateBullet(type, posX, posY)
+    bullet = CreateEntity()
+    AddBoxColliderComponent(bullet, posX, posY, 80, 50)
+    AddCustomComponent(bullet, "DamageComponent", 6.0)
+
+    local texturePath = "game/assets/textures/nitwBridge.png"
+    if type == "Standard" then
+        AddMoveComponent(bullet, posX, posY, 0, -3, 0)
+    end
+
+    if type == "SomethingElse" then
+        texturePath = "ja"
+        AddMoveComponent(bullet, posX, posY, 2, 10, 0)
+    end
+
+    AddTextureComponent(bullet, texturePath, posX, posY, 80, 50)
+        
+end
+            
+
 function CreatePlayer(posX, posY)
     player = CreateEntity()
+    local scriptPath = "game/lua/player.lua"
+
+    AddGameSystemComponent(player, scriptPath)
     AddMoveComponent(player, posX, posY, 0, 0, 0) --speed doesn't matter here
     AddTextureComponent(player, "game/assets/textures/HumanoidTpose.png", posX, posY, 150, 80)
     AddInputComponent(player)
@@ -35,10 +58,10 @@ function ReadInput(entity)
     local arrowUp, shootButton, xInput, yInput = GetInputValues(entity)
 
     table = {}
-    table["arrowUp"] = arrowUp
-    table["shootButton"] = shootButton
-    table["xInput"] = xInput
-    table["yInput"] = yInput
+    table.arrowUp = arrowUp
+    table.shootButton = shootButton
+    table.xInput = xInput
+    table.yInput = yInput
 
     return table
 end
