@@ -1,4 +1,5 @@
 #include "../headers/luaFunctions.h"
+#include "luaFunctions.h"
 
 lua_State *LuaSetup()
 {
@@ -29,6 +30,9 @@ lua_State *LuaSetup()
     lua_setglobal(L, "GetComponentValues");
     lua_pushcfunction(L, lua_SetComponentValues);
     lua_setglobal(L, "SetComponentValues");
+
+    lua_pushcfunction(L, lua_DeleteEntity);
+    lua_setglobal(L, "DeleteEntity");
 
     return L;
 }
@@ -224,6 +228,14 @@ int lua_SetComponentValues(lua_State *L)
     }
 
     //Add more if needed
+
+    return 0;
+}
+int lua_DeleteEntity(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    registry.destroy(entity);
 
     return 0;
 }

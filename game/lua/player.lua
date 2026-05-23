@@ -1,21 +1,27 @@
 local Player = {}
-Player.tag = "Player"
-
-
 
 function Player:Start()
     print("THE PLAYER HAS STARTED DOING STUFF, NOOOOOOOOO!")
+
+    Player.tag = "Player"
+    Player.shoot = false
+    Player.shootTimer = coroutine.create(coShootBullet)
 end
 
 function Player:Update()
     local playerSpeed = 160.0
     local input = ReadInput(self.ID) --player is a global entity
     local move = ReadMoveComponent(self.ID)
-    local totalInput = input.xInput + input.yInput
+    local totalInput = math.sqrt(input.xInput * input.xInput + input.yInput * input.yInput)
+
+    shoot = input.shootButton
+    shootCoolDown = 0.5
+    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", move.xPos, move.yPos)
+
 
     if totalInput > 1 then
-        input.xInput = 1 / (input.xInput + input.yInput)
-        input.yInput = 1 / (input.xInput + input.yInput)
+        input.xInput = input.xInput / totalInput
+        input.yInput = input.yInput / totalInput
     end
 
     deltaTime = GetDeltaTime()
@@ -23,10 +29,6 @@ function Player:Update()
     yVelocity = input.yInput * playerSpeed * deltaTime
     SetComponentValues(self.ID, "MoveComponent", move.xPos, move.yPos, xVelocity, yVelocity)
     --maybe setcomponent, in c++ registry.emplace_or_replace
-
-    if input.shootButton then
-        CreateBullet("Standard", move.xPos, move.yPos)
-    end
 end
 
 return Player

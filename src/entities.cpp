@@ -1,5 +1,4 @@
 #include "../headers/entities.h"
-#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -130,7 +129,7 @@ void UpdateInputComponents(entt::registry &registry)
     }
 }
 
-void UpdateColliderComponents(entt::registry &registry)
+void UpdateColliderComponents(entt::registry &registry, lua_State* L)
 {
     //max nr of colliders is 256, this is not very clean but I have to put colliders in
     //a contigous array somehow, and I don't have a class to store the array in because of ecs.
@@ -158,6 +157,37 @@ void UpdateColliderComponents(entt::registry &registry)
 
                 colliders[j]->inCollision = true;
                 colliders[j]->hitEntity = entities[i];
+
+                GameSystemComponent* system1 = registry.try_get<GameSystemComponent>(entities[i]);
+                GameSystemComponent* system2 = registry.try_get<GameSystemComponent>(entities[j]);
+                std::string* tag1 = registry.try_get<std::string>(entities[i]);
+                std::string* tag2 = registry.try_get<std::string>(entities[j]);
+
+                if(system1 && tag2)
+                {
+                    lua_pushstring(L, tag2->c_str());
+                    lua_rawgeti(L, LUA_REGISTRYINDEX, system1->luaTableReference);
+                    lua_getfield(L, -1, "OnCollision");
+                    lua_pushvalue(L, -2);
+                    if (lua_pcall(L, 2, 0, 0) != LUA_OK)
+                    {
+                        std::cout << "OnCollision 1 failed!" << std::endl;
+                    }
+                    lua_pop(L, 1);
+                }
+
+                if(system2 && tag1)
+                {
+                    lua_pushstring(L, tag1->c_str());
+                    lua_rawgeti(L, LUA_REGISTRYINDEX, system2->luaTableReference);
+                    lua_getfield(L, -1, "OnCollision");
+                    lua_pushvalue(L, -2);
+                    if (lua_pcall(L, 2, 0, 0) != LUA_OK)
+                    {
+                        std::cout << "OnCollision 2 failed!" << std::endl;
+                    }
+                    lua_pop(L, 1);
+                }
             }
         }
     }
@@ -204,6 +234,33 @@ entt::registry &GetRegistry()
 {
     static entt::registry registry;
     return registry;
+}
+
+// void OnCollisions(entt::registry &registry, lua_State *L)
+// {
+//     auto view = registry.view<GameSystemComponent>();
+
+//     view.each([&](GameSystemComponent& script)
+//     {
+//         lua_rawgeti(L, LUA_REGISTRYINDEX, script.luaTableReference);
+//         lua_getfield(L, -1, "Update");
+//         lua_pushvalue(L, -2);
+//         if (lua_pcall(L, 1, 0, 0) != LUA_OK)
+//         {
+//             std::cout << "UpdateGameSystems failed!" << std::endl;
+//         }
+//         lua_pop(L, 1);
+//     });
+// }
+
+void GetGameTag(lua_State *L, std::string tag)
+{
+    lua_pushstring(L, tag.c_str());
+}
+
+int lua_GetGameTag(lua_State *L)
+{
+    return 0;
 }
 
 int ReferenceAndPushBehaviour(lua_State* L, int entity, std::string scriptPath)

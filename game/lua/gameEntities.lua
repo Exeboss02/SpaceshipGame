@@ -9,6 +9,7 @@ function CreateBullet(type, posX, posY)
     bullet = CreateEntity()
     AddGameSystemComponent(bullet, "game/lua/bullet.lua")
     AddBoxColliderComponent(bullet, posX, posY, 80, 50)
+    AddCustomComponent(bullet, "GameTag", "BULLET")
 
     local texturePath = "game/assets/textures/nitwBridge.png"
     if type == "Standard" then
@@ -38,6 +39,7 @@ function CreatePlayer(posX, posY)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
     AddBoxColliderComponent(player, posX, posY, 160, 80)
+    AddCustomComponent(player, "GameTag", "PLAYER")
 
     return player
 end
@@ -47,11 +49,26 @@ function CreateEnemyDrone(posX, posY)
     AddMoveComponent(drone, posX, posY, 0, 0, 1040.0)
     AddTextureComponent(drone, "game/assets/textures/nitwBridge.png", posX, posY, 120, 80)
     AddBoxColliderComponent(drone, posX, posY, 80, 50)
+    AddCustomComponent(drone, "GameTag", "ENEMY")
 
     return drone
 end
 
---will probably not be used
+function coShootBullet()
+    local currentTime = 0
+
+    while true do
+        currentTime = currentTime - GetDeltaTime()
+
+        local startTime, shoot, type, xPos, yPos = coroutine.yield()
+
+        if shoot and currentTime <= 0 then
+            CreateBullet(type, xPos, yPos)
+            currentTime = startTime
+        end
+    end
+end
+
 function ReadInput(entity)
     local arrowUp, shootButton, xInput, yInput = GetComponentValues(entity, "InputComponent")
 

@@ -6,6 +6,14 @@
 
 #include "../headers/resourceStorage.h"
 
+enum GameTag
+{
+    NONE,
+    PLAYER,
+    ENEMY,
+    BULLET
+};
+
 struct BackgroundComponent //is a game entity but has to be here because of template jank
 {
     float scrollSpeed = 1.0f;
@@ -71,9 +79,13 @@ void AddGameSystemComponent(entt::registry& registry, entt::entity& entity, std:
 int ReferenceAndPushBehaviour(lua_State* L, int entity, std::string scriptPath);
 void UpdateGameSystems(entt::registry& registry, lua_State* L);
 void UpdateInputComponents(entt::registry& registry);
-void UpdateColliderComponents(entt::registry& registry);
+void UpdateColliderComponents(entt::registry& registry, lua_State* L);
 void UpdateMoveComponents(entt::registry& registry);
 void UpdateTimerComponents(entt::registry& registry);
 void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);
 
 entt::registry& GetRegistry();
+void OnCollisions(entt::registry& registry, lua_State* L);
+
+void GetGameTag(lua_State *L, std::string tag);
+int lua_GetGameTag(lua_State* L); //has to be here because of collisions

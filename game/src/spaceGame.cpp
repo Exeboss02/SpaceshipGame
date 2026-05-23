@@ -22,7 +22,15 @@ int lua_AddCustomComponent(lua_State *L)
         return 3;
     }
 
-    return 2;
+    else if(type == ("GameTag"))
+    {
+        std::string tag = static_cast<std::string>(lua_tostring(L, 3));
+        AddCustomComponent<std::string>(registry, entity, tag);
+
+        return 0;
+    }
+
+    return 0;
 }
 
 void DrawBackground(entt::registry &registry)

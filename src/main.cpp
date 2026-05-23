@@ -25,10 +25,6 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())
     {
-        // Update
-        // TODO: Add your game logic here
-
-        // Draw
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawText("Hello, Raylib!", 190, 200, 20, BLACK);
@@ -37,7 +33,7 @@ int main(void)
 
             UpdateInputComponents(registry);
             UpdateTimerComponents(registry);
-            UpdateColliderComponents(registry);
+            UpdateColliderComponents(registry, L);
 
             UpdateMoveComponents(registry);
             DrawBackground(registry);

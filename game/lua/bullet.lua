@@ -11,8 +11,13 @@ function Bullet:Update()
     --set velocity etc
 end
 
-function Bullet:OnCollision()
-    print("Collision!")
+function Bullet:OnCollision(otherTag)
+    
+    print(otherTag)
+
+    -- if otherTag != "PLAYER" then
+    --     DeleteEntity(self.ID)
+    -- end
 end
 
 return Bullet
