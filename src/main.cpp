@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../game/headers/gameEntities.h"
+#include "../headers/luaFunctions.h"
 
 int main(void)
 {
@@ -17,11 +18,9 @@ int main(void)
 
     // Create a Lua state
     lua_State* L = LuaSetup();
-    GameLuaSetup(L);
     luaL_dofile(L, "game/lua/start.lua");
 
     entt::registry& registry = GetRegistry();
-    CreateGameEntities(registry);
 
     // Main game loop
     while (!WindowShouldClose())
