@@ -53,13 +53,25 @@ end
 
 --will probably not be used
 function ReadInput(entity)
-    local arrowUp, shootButton, xInput, yInput = GetInputValues(entity)
+    local arrowUp, shootButton, xInput, yInput = GetComponentValues(entity, "InputComponent")
 
     table = {}
     table.arrowUp = arrowUp
     table.shootButton = shootButton
     table.xInput = xInput
     table.yInput = yInput
+
+    return table
+end
+
+function ReadMoveComponent(entity)
+    local xPos, yPos, xVel, yVel = GetComponentValues(entity, "MoveComponent")
+
+    table = {}
+    table.xPos = xPos
+    table.yPos = yPos
+    table.xVel = xVel
+    table.yVel = yVel
 
     return table
 end

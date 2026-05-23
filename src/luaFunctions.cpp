@@ -17,17 +17,18 @@ lua_State *LuaSetup()
     lua_setglobal(L, "AddTimerComponent");
     lua_pushcfunction(L, lua_AddBoxColliderComponent);
     lua_setglobal(L, "AddBoxColliderComponent");
-
-    lua_pushcfunction(L, lua_GetInputValues);
-    lua_setglobal(L, "GetInputValues");
-    lua_pushcfunction(L, lua_GetDeltaTime);
-    lua_setglobal(L, "GetDeltaTime");
-    lua_pushcfunction(L, lua_SetMoveComponentVelocity);
-    lua_setglobal(L, "SetMoveComponentVelocity");
     lua_pushcfunction(L, lua_AddGameSystemComponent);
     lua_setglobal(L, "AddGameSystemComponent");
     lua_pushcfunction(L, lua_AddCustomComponent);
     lua_setglobal(L, "AddCustomComponent");
+
+    lua_pushcfunction(L, lua_GetDeltaTime);
+    lua_setglobal(L, "GetDeltaTime");
+
+    lua_pushcfunction(L, lua_GetComponentValues);
+    lua_setglobal(L, "GetComponentValues");
+    lua_pushcfunction(L, lua_SetComponentValues);
+    lua_setglobal(L, "SetComponentValues");
 
     return L;
 }
@@ -125,50 +126,104 @@ int lua_AddGameSystemComponent(lua_State *L)
     return 0;
 }
 
-int lua_GetInputValues(lua_State *L)
-{
-    entt::registry& registry = GetRegistry();
-    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
-    auto* input = registry.try_get<InputComponent>(entity);
-
-    if(input)
-    {
-        lua_pushboolean(L, input->arrowUp);
-        lua_pushboolean(L, input->shootButton);
-        lua_pushnumber(L, input->xInput);
-        lua_pushnumber(L, input->yInput);
-    }
-    else
-    {
-        lua_pushnil(L);
-        lua_pushnil(L);
-        lua_pushnil(L);
-        lua_pushnil(L);
-    }
-
-    return 4;
-}
-
 int lua_GetDeltaTime(lua_State *L)
 {
     lua_pushnumber(L, GetFrameTime());
     return 1;
 }
 
-int lua_SetMoveComponentVelocity(lua_State *L)
+int lua_GetComponentValues(lua_State* L)
 {
+    void* component = nullptr;
     entt::registry& registry = GetRegistry();
     entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
-    float velX = static_cast<float>(lua_tonumber(L, 2));
-    float velY = static_cast<float>(lua_tonumber(L, 3));
+    std::string componentName = static_cast<std::string>(lua_tostring(L, 2));
 
-    auto* moveComponent = registry.try_get<MoveComponent>(entity);
-    if(moveComponent)
+    if(componentName == "MoveComponent")
     {
-        moveComponent->velocity = Vector2{velX, velY};
+        component = registry.try_get<MoveComponent>(entity);
+        if(component)
+        {
+            MoveComponent* movePtr = static_cast<MoveComponent*>(component);
+            lua_pushnumber(L, movePtr->position.x);
+            lua_pushnumber(L, movePtr->position.y);
+
+            lua_pushnumber(L, movePtr->velocity.x);
+            lua_pushnumber(L, movePtr->velocity.y);
+            //speedMultiplier doesn't matter anymore
+
+            return 4;
+        }
     }
-    
-    //speed scaler will only be in lua from now on
+
+    else if(componentName == "InputComponent")
+    {
+        component = registry.try_get<InputComponent>(entity);
+        if(component)
+        {
+            InputComponent* inputPtr = static_cast<InputComponent*>(component);
+            lua_pushboolean(L, inputPtr->arrowUp);
+            lua_pushboolean(L, inputPtr->shootButton);
+
+            lua_pushnumber(L, inputPtr->xInput);
+            lua_pushnumber(L, inputPtr->yInput);
+        }
+
+        return 4;
+    }
+
+    return 0;
+    //Add more if needed
+}
+
+int lua_SetComponentValues(lua_State *L)
+{
+    void* component = nullptr;
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+    std::string componentName = static_cast<std::string>(lua_tostring(L, 2));
+
+    if(componentName == "MoveComponent")
+    {
+        component = registry.try_get<MoveComponent>(entity);
+        if(component)
+        {
+            MoveComponent* movePtr = static_cast<MoveComponent*>(component);
+            float posX = static_cast<float>(lua_tonumber(L, 3));
+            float posY = static_cast<float>(lua_tonumber(L, 4));
+            float velX = static_cast<float>(lua_tonumber(L, 5));
+            float velY = static_cast<float>(lua_tonumber(L, 6));
+
+            movePtr->position.x = posX;
+            movePtr->position.y = posY;
+            movePtr->velocity.x = velX;
+            movePtr->velocity.y = velY;
+
+            return 0;
+        }
+    }
+
+    else if(componentName == "InputComponent")
+    {
+        component = registry.try_get<InputComponent>(entity);
+        if(component)
+        {
+            InputComponent* inputPtr = static_cast<InputComponent*>(component);
+            float xInput = static_cast<float>(lua_tonumber(L, 3));
+            float yInput = static_cast<float>(lua_tonumber(L, 4));
+            bool shootButton = static_cast<bool>(lua_toboolean(L, 5));
+            bool arrowUp = static_cast<bool>(lua_toboolean(L, 6));
+
+            inputPtr->xInput = xInput;
+            inputPtr->yInput = yInput;
+            inputPtr->shootButton = shootButton;
+            inputPtr->xInput = arrowUp;
+
+            return 0;
+        }
+    }
+
+    //Add more if needed
 
     return 0;
 }

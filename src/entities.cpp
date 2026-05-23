@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
