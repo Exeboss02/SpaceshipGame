@@ -1,6 +1,6 @@
 -- function coShooting(deltaTime)
-
 local Player = {}
+Player.tag = "Player"
 
 function Player:Start()
     print("THE PLAYER HAS STARTED DOING STUFF, NOOOOOOOOO!")

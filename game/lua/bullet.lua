@@ -1,5 +1,5 @@
 local Bullet = {}
-Bullet.tag = "BULLET"
+Bullet.tag = "Bullet"
 Bullet.type = "Standard"
 Bullet.damage = 6
 

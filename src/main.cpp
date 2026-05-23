@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-#include "../game/headers/gameEntities.h"
+#include "../game/headers/spaceGame.h"
 #include "../headers/luaFunctions.h"
 
 int main(void)
