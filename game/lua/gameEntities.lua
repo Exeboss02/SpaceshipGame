@@ -5,11 +5,11 @@ function CreateBackground(texturePath, scrollSpeed)
     AddCustomComponent(background, "BackgroundComponent", scrollSpeed)
 end
 
-function CreateBullet(type, posX, posY)
+function CreateBullet(type, tag, posX, posY)
     bullet = CreateEntity()
     AddGameSystemComponent(bullet, "game/lua/bullet.lua")
     AddBoxColliderComponent(bullet, posX, posY, 80, 50)
-    AddCustomComponent(bullet, "GameTag", "BULLET")
+    AddCustomComponent(bullet, "GameTag", tag)
 
     local texturePath = "game/assets/textures/nitwBridge.png"
     if type == "Standard" then
@@ -46,6 +46,7 @@ end
 
 function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
+    AddGameSystemComponent(drone, "game/lua/drone.lua")
     AddMoveComponent(drone, posX, posY, 0, 0, 1040.0)
     AddTextureComponent(drone, "game/assets/textures/nitwBridge.png", posX, posY, 120, 80)
     AddBoxColliderComponent(drone, posX, posY, 80, 50)
@@ -60,10 +61,10 @@ function coShootBullet()
     while true do
         currentTime = currentTime - GetDeltaTime()
 
-        local startTime, shoot, type, xPos, yPos = coroutine.yield()
+        local startTime, shoot, type, tag, xPos, yPos = coroutine.yield()
 
         if shoot and currentTime <= 0 then
-            CreateBullet(type, xPos, yPos)
+            CreateBullet(type, tag, xPos, yPos)
             currentTime = startTime
         end
     end

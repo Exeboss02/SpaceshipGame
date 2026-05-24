@@ -165,10 +165,10 @@ void UpdateColliderComponents(entt::registry &registry, lua_State* L)
 
                 if(system1 && tag2)
                 {
-                    lua_pushstring(L, tag2->c_str());
                     lua_rawgeti(L, LUA_REGISTRYINDEX, system1->luaTableReference);
                     lua_getfield(L, -1, "OnCollision");
                     lua_pushvalue(L, -2);
+                    lua_pushstring(L, tag2->c_str());
                     if (lua_pcall(L, 2, 0, 0) != LUA_OK)
                     {
                         std::cout << "OnCollision 1 failed!" << std::endl;
@@ -178,10 +178,10 @@ void UpdateColliderComponents(entt::registry &registry, lua_State* L)
 
                 if(system2 && tag1)
                 {
-                    lua_pushstring(L, tag1->c_str());
                     lua_rawgeti(L, LUA_REGISTRYINDEX, system2->luaTableReference);
                     lua_getfield(L, -1, "OnCollision");
                     lua_pushvalue(L, -2);
+                    lua_pushstring(L, tag1->c_str());
                     if (lua_pcall(L, 2, 0, 0) != LUA_OK)
                     {
                         std::cout << "OnCollision 2 failed!" << std::endl;

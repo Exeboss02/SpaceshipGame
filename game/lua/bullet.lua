@@ -1,5 +1,4 @@
 local Bullet = {}
-Bullet.tag = "Bullet"
 Bullet.type = "Standard"
 Bullet.damage = 6
 
@@ -12,12 +11,11 @@ function Bullet:Update()
 end
 
 function Bullet:OnCollision(otherTag)
-    
-    print(otherTag)
+    if otherTag ~= "PLAYER" then
+        DeleteEntity(self.ID)
+    end
 
-    -- if otherTag != "PLAYER" then
-    --     DeleteEntity(self.ID)
-    -- end
+    print(otherTag)
 end
 
 return Bullet

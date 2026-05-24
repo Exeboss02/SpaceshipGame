@@ -1,4 +1,5 @@
 local Player = {}
+Player.hp = 3
 
 function Player:Start()
     print("THE PLAYER HAS STARTED DOING STUFF, NOOOOOOOOO!")
@@ -16,7 +17,7 @@ function Player:Update()
 
     shoot = input.shootButton
     shootCoolDown = 0.5
-    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", move.xPos, move.yPos)
+    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos, move.yPos)
 
 
     if totalInput > 1 then
@@ -29,6 +30,20 @@ function Player:Update()
     yVelocity = input.yInput * playerSpeed * deltaTime
     SetComponentValues(self.ID, "MoveComponent", move.xPos, move.yPos, xVelocity, yVelocity)
     --maybe setcomponent, in c++ registry.emplace_or_replace
+end
+
+function Player:OnCollision(otherTag)
+    if otherTag == "ENEMYBULLET" then
+        self.hp = self.hp -1
+    end
+
+    print(otherTag)
+
+    if self.hp <= 0 then
+        print("Player is dead!")
+    end
+
+        --reload scene function
 end
 
 return Player

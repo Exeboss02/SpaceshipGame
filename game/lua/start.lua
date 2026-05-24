@@ -6,7 +6,7 @@ end
 
 CreateBackground("game/assets/textures/space.png", 55.0)
 
-player = CreatePlayer(100, 40)
+player = CreatePlayer(20, 40)
 
 CreateEnemyDrone(200, 40)
 CreateEnemyDrone(300, 80)
