@@ -8,12 +8,13 @@
 int main(void)
 {
     // Initialize window
-    const int screenWidth = 900;
-    const int screenHeight = 550;
+    const int screenWidth = 1920;
+    const int screenHeight = 1080;
     InitWindow(screenWidth, screenHeight, "Spaceship Game");
 
     // Set target FPS
     SetTargetFPS(144);
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
     Color customColor = {255, 80, 30, 255};
 
     // Create a Lua state
@@ -29,6 +30,7 @@ int main(void)
             ClearBackground(RAYWHITE);
             DrawText("Hello, Raylib!", 190, 200, 20, BLACK);
 
+            UpdateButtonComponents(registry);
             UpdateGameSystems(registry, L);
 
             UpdateInputComponents(registry);

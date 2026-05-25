@@ -47,6 +47,7 @@ struct InputComponent
     float xInput = {};
     bool shootButton = false;
     bool arrowUp = false;
+    bool shift = false;
 };
 
 struct BoxColliderComponent
@@ -62,6 +63,11 @@ struct GameSystemComponent
     int luaTableReference;
 };
 
+struct ButtonComponent
+{
+    bool wasPressed = false;
+};
+
 std::string GetExecutablePath();
 
 
@@ -75,6 +81,7 @@ void AddInputComponent(entt::registry& registry, entt::entity& entity);
 void AddTimerComponent(entt::registry& registry, entt::entity& entity, float startTime);
 void AddBoxColliderComponent(entt::registry& registry, entt::entity& entity, Vector2 position, Vector2 scale);
 void AddGameSystemComponent(entt::registry& registry, entt::entity& entity, std::string scriptPath, int luaReference);
+void AddButtonComponent(entt::registry& registry, entt::entity& entity);
 
 int ReferenceAndPushBehaviour(lua_State* L, int entity, std::string scriptPath);
 void UpdateGameSystems(entt::registry& registry, lua_State* L);
@@ -82,6 +89,7 @@ void UpdateInputComponents(entt::registry& registry);
 void UpdateColliderComponents(entt::registry& registry, lua_State* L);
 void UpdateMoveComponents(entt::registry& registry);
 void UpdateTimerComponents(entt::registry& registry);
+void UpdateButtonComponents(entt::registry& registry);
 void ResetTimerComponent(entt::registry &registry, entt::entity timerHoldingEntity);
 
 entt::registry& GetRegistry();

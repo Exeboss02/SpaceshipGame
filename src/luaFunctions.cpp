@@ -20,6 +20,8 @@ lua_State *LuaSetup()
     lua_setglobal(L, "AddBoxColliderComponent");
     lua_pushcfunction(L, lua_AddGameSystemComponent);
     lua_setglobal(L, "AddGameSystemComponent");
+    lua_pushcfunction(L, lua_AddButtonComponent);
+    lua_setglobal(L, "AddButtonComponent");
     lua_pushcfunction(L, lua_AddCustomComponent);
     lua_setglobal(L, "AddCustomComponent");
 
@@ -130,6 +132,16 @@ int lua_AddGameSystemComponent(lua_State *L)
     return 0;
 }
 
+int lua_AddButtonComponent(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
+
+    AddButtonComponent(registry, entity);
+
+    return 0;
+}
+
 int lua_GetDeltaTime(lua_State *L)
 {
     lua_pushnumber(L, GetFrameTime());
@@ -168,12 +180,25 @@ int lua_GetComponentValues(lua_State* L)
             InputComponent* inputPtr = static_cast<InputComponent*>(component);
             lua_pushboolean(L, inputPtr->arrowUp);
             lua_pushboolean(L, inputPtr->shootButton);
+            lua_pushboolean(L, inputPtr->shift);
 
             lua_pushnumber(L, inputPtr->xInput);
             lua_pushnumber(L, inputPtr->yInput);
         }
 
-        return 4;
+        return 5;
+    }
+
+    else if(componentName == "ButtonComponent")
+    {
+        component = registry.try_get<ButtonComponent>(entity);
+        if(component)
+        {
+            ButtonComponent* buttonPtr = static_cast<ButtonComponent*>(component);
+            lua_pushboolean(L, buttonPtr->wasPressed);
+
+            return 1;
+        }
     }
 
     return 0;
@@ -217,11 +242,13 @@ int lua_SetComponentValues(lua_State *L)
             float yInput = static_cast<float>(lua_tonumber(L, 4));
             bool shootButton = static_cast<bool>(lua_toboolean(L, 5));
             bool arrowUp = static_cast<bool>(lua_toboolean(L, 6));
+            bool shift = static_cast<bool>(lua_toboolean(L, 6));
 
             inputPtr->xInput = xInput;
             inputPtr->yInput = yInput;
             inputPtr->shootButton = shootButton;
             inputPtr->xInput = arrowUp;
+            inputPtr->shift = shift;
 
             return 0;
         }

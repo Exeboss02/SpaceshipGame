@@ -10,14 +10,18 @@ function Player:Start()
 end
 
 function Player:Update()
-    local playerSpeed = 160.0
+    local playerSpeed = 550.0
     local input = ReadInput(self.ID) --player is a global entity
     local move = ReadMoveComponent(self.ID)
     local totalInput = math.sqrt(input.xInput * input.xInput + input.yInput * input.yInput)
 
+    if input.shift then
+        playerSpeed = 200
+    end
+
     shoot = input.shootButton
-    shootCoolDown = 0.5
-    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos, move.yPos)
+    shootCoolDown = 0.3
+    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos + 85, move.yPos)
 
 
     if totalInput > 1 then

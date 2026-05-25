@@ -5,17 +5,24 @@ function CreateBackground(texturePath, scrollSpeed)
     AddCustomComponent(background, "BackgroundComponent", scrollSpeed)
 end
 
+function CreateButton(xPos, yPos, sizeX, sizeY, texturePath, scriptPath)
+    button = CreateEntity()
+    AddButtonComponent(button)
+    AddTextureComponent(button, texturePath, xPos, yPos, sizeX, sizeY)
+    AddGameSystemComponent(button, scriptPath)
+end
+
 function CreateBullet(type, tag, posX, posY)
     bullet = CreateEntity()
     AddGameSystemComponent(bullet, "game/lua/bullet.lua")
-    AddBoxColliderComponent(bullet, posX, posY, 80, 80)
+    AddBoxColliderComponent(bullet, posX, posY, 30, 80)
     AddCustomComponent(bullet, "GameTag", tag)
 
     local texturePath = "game/assets/textures/playerShot.png"
     if type == "Standard" then
         -- self.type = "Standard"
         -- self.damage = 6
-        AddMoveComponent(bullet, posX, posY, 0, -3, 0)
+        AddMoveComponent(bullet, posX, posY, 0, -10, 0)
     end
 
     if type == "SomethingElse" then
@@ -35,7 +42,7 @@ function CreatePlayer(posX, posY)
     player = CreateEntity()
     AddGameSystemComponent(player, "game/lua/player.lua")
     AddMoveComponent(player, posX, posY, 0, 0, 0) --speed doesn't matter here
-    AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 180, 180)
+    AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 250, 250)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
     AddBoxColliderComponent(player, posX, posY, 160, 80)
@@ -71,11 +78,12 @@ function coShootBullet()
 end
 
 function ReadInput(entity)
-    local arrowUp, shootButton, xInput, yInput = GetComponentValues(entity, "InputComponent")
+    local arrowUp, shootButton, shift, xInput, yInput = GetComponentValues(entity, "InputComponent")
 
     table = {}
     table.arrowUp = arrowUp
     table.shootButton = shootButton
+    table.shift = shift
     table.xInput = xInput
     table.yInput = yInput
 

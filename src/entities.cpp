@@ -1,4 +1,5 @@
 #include "../headers/entities.h"
+#include "entities.h"
 
 //fix this for cross-platform later. windows.h sucks by the way
 std::string GetExecutablePath()
@@ -73,6 +74,11 @@ void AddGameSystemComponent(entt::registry &registry, entt::entity &entity, std:
     registry.emplace<GameSystemComponent>(entity, scriptPath, luaReference);
 }
 
+void AddButtonComponent(entt::registry &registry, entt::entity &entity)
+{
+    registry.emplace<ButtonComponent>(entity);
+}
+
 void AddMoveComponent(entt::registry &registry, entt::entity &entity, Vector2 position, Vector2 velocity, float speedMultiplier)
 {
     registry.emplace<MoveComponent>(entity, position, velocity, speedMultiplier);
@@ -126,6 +132,8 @@ void UpdateInputComponents(entt::registry &registry)
         else input.shootButton = false;
         if(IsKeyDown(KEY_UP)) input.arrowUp = true;
         else input.arrowUp = false;
+        if(IsKeyDown(KEY_LEFT_SHIFT)) input.shift = true;
+        else input.shift = false;
     }
 }
 
@@ -221,6 +229,31 @@ void UpdateTimerComponents(entt::registry &registry)
     for (auto [entity, timer] : view.each())
     {
         if(!timer.paused && timer.currentTime > 0) timer.currentTime -= GetFrameTime();
+    }
+}
+
+void UpdateButtonComponents(entt::registry &registry)
+{
+    auto view = registry.view<ButtonComponent, TextureComponent>();
+    for (auto [entity, buttonComponent, textureComponent] : view.each())
+    {
+        Vector2 mousePosition = GetMousePosition();
+        Vector2 rightSidePosition;
+        rightSidePosition.x = textureComponent.position.x + textureComponent.size.x;
+        rightSidePosition.y = textureComponent.position.y + textureComponent.size.y;
+
+        if(mousePosition.x > textureComponent.position.x && mousePosition.x < rightSidePosition.x
+            && mousePosition.y > textureComponent.position.y && mousePosition.y < rightSidePosition.y
+            && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
+        )
+        {
+            buttonComponent.wasPressed = true;
+        }
+
+        else
+        {
+            buttonComponent.wasPressed = false;
+        }
     }
 }
 

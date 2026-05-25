@@ -13,3 +13,5 @@ CreateEnemyDrone(300, 80)
 CreateEnemyDrone(400, 120)
 CreateEnemyDrone(500, 160)
 CreateEnemyDrone(600, 200)
+
+CreateButton(100, 100, 400, 300, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua")

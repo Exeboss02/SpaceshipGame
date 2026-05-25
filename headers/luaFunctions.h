@@ -12,6 +12,7 @@ int lua_AddInputComponent(lua_State* L);
 int lua_AddTimerComponent(lua_State* L);
 int lua_AddBoxColliderComponent(lua_State* L);
 int lua_AddGameSystemComponent(lua_State* L);
+int lua_AddButtonComponent(lua_State* L);
 int lua_AddCustomComponent(lua_State* L);
 
 int lua_GetDeltaTime(lua_State* L);
