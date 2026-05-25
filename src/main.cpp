@@ -19,7 +19,7 @@ int main(void)
 
     // Create a Lua state
     lua_State* L = LuaSetup();
-    luaL_dofile(L, "game/lua/levels/testLevel.lua");
+    luaL_dofile(L, "game/lua/levels/start.lua");
 
     entt::registry& registry = GetRegistry();
 

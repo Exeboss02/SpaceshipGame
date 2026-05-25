@@ -4,7 +4,7 @@ if not success then
     return
 end
 
-CreateBackground("game/assets/textures/space.png", 55.0)
+CreateBackground("game/assets/textures/space3.png", 55.0)
 
 player = CreatePlayer(20, 40)
 
@@ -14,4 +14,4 @@ CreateEnemyDrone(400, 120)
 CreateEnemyDrone(500, 160)
 CreateEnemyDrone(600, 200)
 
-CreateButton(100, 100, 400, 300, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua")
+CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua")
