@@ -9,8 +9,7 @@ function Button:Update()
     print(clicked)
 
     if clicked then
-        print("HEJ----------------------------------------------------------")
-        CreateEnemyDrone(300, 80)
+        DeleteAllEntities()
     end
 end
 

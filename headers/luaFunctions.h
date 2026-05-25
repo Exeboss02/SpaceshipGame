@@ -20,3 +20,5 @@ int lua_GetComponentValues(lua_State* L); //retrieve in lua
 int lua_SetComponentValues(lua_State* L);
 
 int lua_DeleteEntity(lua_State* L);
+int lua_DeleteAllEntities(lua_State* L);
+int lua_LoadScene(lua_State* L);

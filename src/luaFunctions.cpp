@@ -35,6 +35,8 @@ lua_State *LuaSetup()
 
     lua_pushcfunction(L, lua_DeleteEntity);
     lua_setglobal(L, "DeleteEntity");
+    lua_pushcfunction(L, lua_DeleteAllEntities);
+    lua_setglobal(L, "DeleteAllEntities");
 
     return L;
 }
@@ -264,5 +266,21 @@ int lua_DeleteEntity(lua_State *L)
     entt::entity entity = static_cast<entt::entity>(lua_tointeger(L, 1));
     registry.destroy(entity);
 
+    return 0;
+}
+
+int lua_DeleteAllEntities(lua_State *L)
+{
+    entt::registry& registry = GetRegistry();
+    for(auto entity: registry.view<entt::entity>()) 
+    {
+        registry.destroy(entity);
+    }
+
+    return 0;
+}
+
+int lua_LoadScene(lua_State *L)
+{
     return 0;
 }
