@@ -8,10 +8,10 @@ end
 function CreateBullet(type, tag, posX, posY)
     bullet = CreateEntity()
     AddGameSystemComponent(bullet, "game/lua/bullet.lua")
-    AddBoxColliderComponent(bullet, posX, posY, 80, 50)
+    AddBoxColliderComponent(bullet, posX, posY, 80, 80)
     AddCustomComponent(bullet, "GameTag", tag)
 
-    local texturePath = "game/assets/textures/nitwBridge.png"
+    local texturePath = "game/assets/textures/playerShot.png"
     if type == "Standard" then
         -- self.type = "Standard"
         -- self.damage = 6
@@ -35,7 +35,7 @@ function CreatePlayer(posX, posY)
     player = CreateEntity()
     AddGameSystemComponent(player, "game/lua/player.lua")
     AddMoveComponent(player, posX, posY, 0, 0, 0) --speed doesn't matter here
-    AddTextureComponent(player, "game/assets/textures/HumanoidTpose.png", posX, posY, 150, 80)
+    AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 180, 180)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
     AddBoxColliderComponent(player, posX, posY, 160, 80)
@@ -47,8 +47,8 @@ end
 function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
     AddGameSystemComponent(drone, "game/lua/drone.lua")
-    AddMoveComponent(drone, posX, posY, 0, 0, 1040.0)
-    AddTextureComponent(drone, "game/assets/textures/nitwBridge.png", posX, posY, 120, 80)
+    AddMoveComponent(drone, posX, posY, 0, 0.5, 0)
+    AddTextureComponent(drone, "game/assets/textures/enemyDrone.png", posX, posY, 180, 180)
     AddBoxColliderComponent(drone, posX, posY, 80, 50)
     AddCustomComponent(drone, "GameTag", "ENEMY")
 
