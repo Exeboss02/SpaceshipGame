@@ -256,6 +256,21 @@ int lua_SetComponentValues(lua_State *L)
         }
     }
 
+    else if(componentName == "TextureComponent")
+    {
+        component = registry.try_get<TextureComponent>(entity);
+        if(component)
+        {
+            TextureComponent* texturePtr = static_cast<TextureComponent*>(component);
+            std::string texturePath = static_cast<std::string>(lua_tostring(L, 3));
+
+            TextureContainer* newTextureContainer = GetTexture(texturePath);
+            texturePtr->textureContainer = newTextureContainer;
+
+            return 0;
+        }
+    }
+
     //Add more if needed
 
     return 0;

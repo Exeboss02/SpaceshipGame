@@ -1,3 +1,5 @@
+enemyButtonIndex = 0
+
 CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua") --exit button
 
 --the grid with buttons
@@ -8,16 +10,16 @@ for i=0, 4 do
 end
 
 --select enemy buttons and add button
-for i=0, 3 do
+for i=0, 1 do
     local texture = "game/assets/textures/enemyDrone.png"
     local script = "game/lua/selectEnemyButton.lua"
 
-    if i == 3 then
+    if i == 1 then
         script = "game/lua/addButton.lua"
         texture = "game/assets/textures/add.png"
     end
 
-    CreateButton(900, 490 + i * 70 + i * 10, 70, 70, texture, script)
+    CreateButton(900, 650 + i * 70 + i * 10, 70, 70, texture, script)
 end
 
 background1 = CreateEntity()
