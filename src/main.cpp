@@ -14,7 +14,7 @@ int main(void)
 
     // Set target FPS
     SetTargetFPS(144);
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
+    //SetConfigFlags(FLAG_MSAA_4X_HINT);
     Color customColor = {255, 80, 30, 255};
 
     // Create a Lua state

@@ -141,8 +141,8 @@ void UpdateColliderComponents(entt::registry &registry, lua_State* L)
 {
     //max nr of colliders is 256, this is not very clean but I have to put colliders in
     //a contigous array somehow, and I don't have a class to store the array in because of ecs.
-    static BoxColliderComponent* colliders[256] = {};
-    static entt::entity entities[256] = {};
+    static BoxColliderComponent* colliders[512] = {};
+    static entt::entity entities[512] = {};
 
     auto view = registry.view<BoxColliderComponent>();
     int index = 0;

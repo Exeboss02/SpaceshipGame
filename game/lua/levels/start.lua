@@ -6,4 +6,5 @@ end
 
 CreateBackground("game/assets/textures/space.png", 80.0)
 
-CreateButton(100, 100, 400, 300, "game/assets/textures/nitwBridge.png", "game/lua/levelButton.lua")
+CreateButton(100, 100, 400, 200, "game/assets/textures/levelSelect.png", "game/lua/levelButton.lua") --level select button
+CreateButton(100, 340, 400, 200, "game/assets/textures/levelEditing.png", "game/lua/editorButton.lua") --level editing button
