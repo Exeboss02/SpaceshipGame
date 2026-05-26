@@ -10,6 +10,8 @@ function CreateButton(xPos, yPos, sizeX, sizeY, texturePath, scriptPath)
     AddButtonComponent(button)
     AddTextureComponent(button, texturePath, xPos, yPos, sizeX, sizeY)
     AddGameSystemComponent(button, scriptPath)
+
+    return button
 end
 
 function CreateBullet(type, tag, posX, posY)

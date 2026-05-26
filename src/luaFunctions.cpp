@@ -1,5 +1,4 @@
 #include "../headers/luaFunctions.h"
-#include "luaFunctions.h"
 
 lua_State *LuaSetup()
 {
@@ -24,6 +23,13 @@ lua_State *LuaSetup()
     lua_setglobal(L, "AddButtonComponent");
     lua_pushcfunction(L, lua_AddCustomComponent);
     lua_setglobal(L, "AddCustomComponent");
+
+    lua_pushcfunction(L, lua_ReadFile);
+    lua_setglobal(L, "ReadFile");
+    lua_pushcfunction(L, lua_WriteToFile);
+    lua_setglobal(L, "WriteToFile");
+    lua_pushcfunction(L, lua_ClearFile);
+    lua_setglobal(L, "ClearFile");    
 
     lua_pushcfunction(L, lua_GetDeltaTime);
     lua_setglobal(L, "GetDeltaTime");

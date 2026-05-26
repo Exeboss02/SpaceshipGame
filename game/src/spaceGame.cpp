@@ -33,6 +33,53 @@ int lua_AddCustomComponent(lua_State *L)
     return 0;
 }
 
+int lua_ReadFile(lua_State *L)
+{
+    std::string filePath = static_cast<std::string>(lua_tostring(L, 1));
+    std::ifstream file(filePath);
+    std::string data = "";
+    std::string row = "";
+
+    while (std::getline(file, row))
+    {
+        data += row;
+    }
+
+    lua_pushstring(L, data.c_str());
+
+    return 1;
+}
+
+int lua_WriteToFile(lua_State *L)
+{
+    std::string filePath = static_cast<std::string>(lua_tostring(L, 1));
+    std::string data = static_cast<std::string>(lua_tostring(L, 2));
+
+    std::ofstream spawnFile(filePath);
+
+    if (!spawnFile.is_open())
+    {
+        std::cout << "Error: Could not open file at " << filePath << std::endl;
+        return 0;
+    }
+    
+    spawnFile << data;
+    spawnFile.close();
+
+    return 0;
+}
+
+int lua_ClearFile(lua_State *L)
+{
+    std::string filePath = static_cast<std::string>(lua_tostring(L, 1));
+
+    std::ofstream spawnFile(filePath);
+    spawnFile << "";
+    spawnFile.close();
+
+    return 0;
+}
+
 void DrawBackground(entt::registry &registry)
 {
     float deltaTime = GetFrameTime();

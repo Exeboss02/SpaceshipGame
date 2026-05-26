@@ -13,7 +13,11 @@ int lua_AddTimerComponent(lua_State* L);
 int lua_AddBoxColliderComponent(lua_State* L);
 int lua_AddGameSystemComponent(lua_State* L);
 int lua_AddButtonComponent(lua_State* L);
-int lua_AddCustomComponent(lua_State* L);
+
+int lua_AddCustomComponent(lua_State* L); //forward declarations
+int lua_ReadFile(lua_State *L);
+int lua_WriteToFile(lua_State* L);
+int lua_ClearFile(lua_State* L);
 
 int lua_GetDeltaTime(lua_State* L);
 int lua_GetComponentValues(lua_State* L); //retrieve in lua
