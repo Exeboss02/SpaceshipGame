@@ -1,14 +1,14 @@
 waveString = {}
 idIndexMap = {}
 
-local test = CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua") --exit button
+local test = CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/buttons/startScreenButton.lua") --exit button
 print(test)
 print("END OF TEST----------------")
 
 --the grid with buttons
 for i=1, 5 do
     for j=1, 7 do
-        local id = CreateButton(1000 + (i - 1) * 70 + (i - 1) * 10, 250 + (j - 1) * 70 + (j - 1) * 10, 70, 70, "game/assets/textures/white.png", "game/lua/enemyGridButton.lua")
+        local id = CreateButton(1000 + (i - 1) * 70 + (i - 1) * 10, 250 + (j - 1) * 70 + (j - 1) * 10, 70, 70, "game/assets/textures/white.png", "game/lua/buttons/enemyGridButton.lua")
         idIndexMap[id] = (i - 1) * 7 + j
     end
 end
@@ -21,10 +21,10 @@ end
 --select enemy buttons and add button
 for i=0, 1 do
     local texture = "game/assets/textures/enemyDrone.png"
-    local script = "game/lua/selectEnemyButton.lua"
+    local script = "game/lua/buttons/selectEnemyButton.lua"
 
     if i == 1 then
-        script = "game/lua/addButton.lua"
+        script = "game/lua/buttons/addButton.lua"
         texture = "game/assets/textures/add.png"
     end
 

@@ -2,8 +2,6 @@ local Player = {}
 Player.hp = 3
 
 function Player:Start()
-    print("THE PLAYER HAS STARTED DOING STUFF, NOOOOOOOOO!")
-
     Player.tag = "Player"
     Player.shoot = false
     Player.shootTimer = coroutine.create(coShootBullet)
@@ -41,10 +39,9 @@ function Player:OnCollision(otherTag)
         self.hp = self.hp -1
     end
 
-    print(otherTag)
-
-    if self.hp <= 0 then
-        print("Player is dead!")
+    if otherTag == "ENEMY" then
+        playerIsDead = true
+        DeleteEntity(self.ID)
     end
 
         --reload scene function

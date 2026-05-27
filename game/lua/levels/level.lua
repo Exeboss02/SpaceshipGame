@@ -1,6 +1,6 @@
 CreateBackground("game/assets/textures/space3.png", 55.0)
 
-local spawnData = ReadFile("game/lua/levels/spawn1.flerp")
+local spawnData = ReadFile(currentSelectedLevel) --global value in levelEditing.lua
 spawnData = spawnData:gsub("\n", "")
 local blockSize = 35
 local nrOfBlocks = #spawnData / blockSize
@@ -10,8 +10,9 @@ local nrOfBlocks = #spawnData / blockSize
 function coSpawner()
     --spawn in grid
     local block = 1
-    local blockSpawnTimer = 6
-    while block <= nrOfBlocks do
+    local blockSpawnTimer = 2
+
+    while block < nrOfBlocks + 1 do
         blockSpawnTimer = blockSpawnTimer - GetDeltaTime()
         coroutine.yield()
 
@@ -32,19 +33,19 @@ function coSpawner()
                         CreateEnemySideShooter(424 * row - 400, -190 * (8 - col) - 50)
                     end
                 end
-
-                block = block + 1
-                blockSpawnTimer = 6
             end
+
+            block = block + 1
+            blockSpawnTimer = 7
+        end
     end
 
     coroutine.close()
 end
 
 spawner = CreateEntity()
---AddGameSystemComponent(spawner, "game/lua/enemySpawner.lua")
+AddGameSystemComponent(spawner, "game/lua/systems/enemySpawner.lua")
 
+player = CreatePlayer(850, 700)
 
-player = CreatePlayer(20, 40)
-
-CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/startScreenButton.lua")
+CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/buttons/startScreenButton.lua")

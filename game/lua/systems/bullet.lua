@@ -1,13 +1,16 @@
 local Bullet = {}
 Bullet.type = "Standard"
-Bullet.damage = 6
+Bullet.timeLeft = 1
 
 function Bullet:Start()
     print("Spawned bullet")
 end
 
 function Bullet:Update()
-    --set velocity etc
+    self.timeLeft = self.timeLeft - GetDeltaTime()
+    if(self.timeLeft <= 0) then
+        DeleteEntity(self.ID)
+    end
 end
 
 function Bullet:OnCollision(otherTag)

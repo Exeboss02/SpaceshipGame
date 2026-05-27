@@ -1,5 +1,5 @@
 local SideShooter = {}
-SideShooter.hp = 10
+SideShooter.hp = 12
 
 function SideShooter:Start()
     print("Spawned drone")

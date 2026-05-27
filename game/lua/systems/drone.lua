@@ -2,11 +2,13 @@ local Drone = {}
 Drone.hp = 3
 
 function Drone:Start()
-    print("Spawned drone")
+    self.shootTimer = coroutine.create(coShootBullet)
 end
 
 function Drone:Update()
-    --set velocity etc
+    local move = ReadMoveComponent(self.ID)
+    local shootCoolDown = 1
+    coroutine.resume(self.shootTimer, shootCoolDown, true, "Drone", "ENEMYBULLET", move.xPos + 85, move.yPos)
 end
 
 function Drone:OnCollision(otherTag)
