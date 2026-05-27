@@ -56,12 +56,34 @@ end
 function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
     AddGameSystemComponent(drone, "game/lua/drone.lua")
-    AddMoveComponent(drone, posX, posY, 0, 1, 0)
+    AddMoveComponent(drone, posX, posY, 0, 2, 0)
     AddTextureComponent(drone, "game/assets/textures/enemyDrone.png", posX, posY, 220, 220)
     AddBoxColliderComponent(drone, posX + 80, posY, 140, 140)
     AddCustomComponent(drone, "GameTag", "ENEMY")
 
     return drone
+end
+
+function CreateEnemyShotgun(posX, posY)
+    shotgun = CreateEntity()
+    AddGameSystemComponent(shotgun, "game/lua/shotgun.lua")
+    AddMoveComponent(shotgun, posX, posY, 0, 1, 0)
+    AddTextureComponent(shotgun, "game/assets/textures/enemyShotgun.png", posX, posY, 220, 220)
+    AddBoxColliderComponent(shotgun, posX + 80, posY, 140, 140)
+    AddCustomComponent(shotgun, "GameTag", "ENEMY")
+
+    return shotgun
+end
+
+function CreateEnemySideShooter(posX, posY)
+    sideShooter = CreateEntity()
+    AddGameSystemComponent(sideShooter, "game/lua/sideShooter.lua")
+    AddMoveComponent(sideShooter, posX, posY, 0, 0.5, 0)
+    AddTextureComponent(sideShooter, "game/assets/textures/enemySideShooter.png", posX, posY, 220, 220)
+    AddBoxColliderComponent(sideShooter, posX + 80, posY, 140, 140)
+    AddCustomComponent(sideShooter, "GameTag", "ENEMY")
+
+    return sideShooter
 end
 
 function coShootBullet()
