@@ -1,5 +1,5 @@
 local Player = {}
-Player.hp = 3
+Player.hp = 5
 
 function Player:Start()
     Player.tag = "Player"
@@ -18,8 +18,8 @@ function Player:Update()
     end
 
     shoot = input.shootButton
-    shootCoolDown = 0.3
-    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos + 85, move.yPos)
+    shootCoolDown = 0.26
+    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos + 50, move.yPos - 40)
 
 
     if totalInput > 1 then
@@ -35,16 +35,23 @@ function Player:Update()
 end
 
 function Player:OnCollision(otherTag)
+
     if otherTag == "ENEMYBULLET" then
-        self.hp = self.hp -1
+        self.hp = self.hp - 1
     end
 
     if otherTag == "ENEMY" then
+        self.hp = self.hp - 3
+    end
+
+    if self.hp <= 0 then
         playerIsDead = true
         DeleteEntity(self.ID)
     end
 
-        --reload scene function
+    print(self.hp)
+
+    --reload scene function
 end
 
 return Player

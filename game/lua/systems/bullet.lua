@@ -1,6 +1,6 @@
 local Bullet = {}
 Bullet.type = "Standard"
-Bullet.timeLeft = 1
+Bullet.timeLeft = 3
 
 function Bullet:Start()
     print("Spawned bullet")
@@ -14,7 +14,7 @@ function Bullet:Update()
 end
 
 function Bullet:OnCollision(otherTag)
-    if otherTag ~= "PLAYER" then
+    if (bulletTagMap[self.ID] == "ENEMYBULLET" and otherTag == "PLAYER") or (bulletTagMap[self.ID] == "PLAYERBULLET" and otherTag == "ENEMY") then
         DeleteEntity(self.ID)
     end
 

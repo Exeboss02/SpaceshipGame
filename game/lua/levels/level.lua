@@ -1,4 +1,4 @@
-CreateBackground("game/assets/textures/space3.png", 55.0)
+CreateBackground("game/assets/textures/space3.png", 150.0)
 
 local spawnData = ReadFile(currentSelectedLevel) --global value in levelEditing.lua
 spawnData = spawnData:gsub("\n", "")
@@ -6,6 +6,9 @@ local blockSize = 35
 local nrOfBlocks = #spawnData / blockSize
 
 --------------------------------------------------------------------------
+
+sideShooterOffsetMap = {}
+sideShooterOffsetValue = 1
 
 function coSpawner()
     --spawn in grid
@@ -30,13 +33,19 @@ function coSpawner()
                     end
 
                     if char == "2" then
-                        CreateEnemySideShooter(424 * row - 400, -190 * (8 - col) - 50)
+                        sideShooter = CreateEnemySideShooter(424 * row - 400, -190 * (8 - col) - 50)
+                        sideShooterOffsetMap[sideShooter] = sideShooterOffsetValue
+                        sideShooterOffsetValue = sideShooterOffsetValue + 1
+
+                        if sideShooterOffsetValue > 2 then
+                            sideShooterOffsetValue = 1
+                        end
                     end
                 end
             end
 
             block = block + 1
-            blockSpawnTimer = 7
+            blockSpawnTimer = 6
         end
     end
 

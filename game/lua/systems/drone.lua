@@ -2,20 +2,17 @@ local Drone = {}
 Drone.hp = 3
 
 function Drone:Start()
-    self.shootTimer = coroutine.create(coShootBullet)
+    print("Spawned drone")
 end
 
 function Drone:Update()
-    local move = ReadMoveComponent(self.ID)
-    local shootCoolDown = 1
-    coroutine.resume(self.shootTimer, shootCoolDown, true, "Drone", "ENEMYBULLET", move.xPos + 85, move.yPos)
 end
 
 function Drone:OnCollision(otherTag)
-    if otherTag ~= "PLAYER" then
+    if otherTag ~= "ENEMYBULLET" then
         self.hp = self.hp - 1
 
-        if self.hp <= 0 then
+        if self.hp <= 0 or otherTag == "PLAYER" then
             DeleteEntity(self.ID)
         end
     end

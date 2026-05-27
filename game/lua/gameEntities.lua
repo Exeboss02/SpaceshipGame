@@ -1,7 +1,9 @@
 math.randomseed(os.time())
 
 currentSelectedLevel = "game/lua/levels/spawn2.flerp"
-currentEditingLevel = "game/lua/levels/spawn1.flerp"
+currentEditingLevel = "game/lua/levels/spawn2.flerp"
+
+bulletTagMap = {}
 
 function CreateBackground(texturePath, scrollSpeed)
     background = CreateEntity()
@@ -20,6 +22,7 @@ end
 
 function CreateBullet(type, tag, posX, posY)
     bullet = CreateEntity()
+    bulletTagMap[bullet] = tag
     AddGameSystemComponent(bullet, "game/lua/systems/bullet.lua")
     AddBoxColliderComponent(bullet, posX, posY, 30, 80)
     AddCustomComponent(bullet, "GameTag", tag)
@@ -29,20 +32,15 @@ function CreateBullet(type, tag, posX, posY)
         AddMoveComponent(bullet, posX, posY, 0, -10, 0)
     end
 
-    if type == "Drone" then
-        texturePath = "game/assets/textures/playerShot.png"
-        xValue = -1 + math.random() * 2
-        AddMoveComponent(bullet, posX, posY + 50, xValue, 45, 0)
-    end
-
     if type == "Shotgun" then
         texturePath = "game/assets/textures/playerShot.png"
-        AddMoveComponent(bullet, posX, posY, 2, -10, 0)
+        xValue = -1 + math.random() * 2
+        AddMoveComponent(bullet, posX, posY + 50, xValue, 5, 0)
     end
 
     if type == "SideShooter" then
         texturePath = "game/assets/textures/playerShot.png"
-        AddMoveComponent(bullet, posX, posY, 4, 0, 0)
+        AddMoveComponent(bullet, posX, posY - 10, 1.5, 0, 0)
     end
 
     AddTextureComponent(bullet, texturePath, posX, posY, 80, 50)
@@ -55,10 +53,10 @@ function CreatePlayer(posX, posY)
     player = CreateEntity()
     AddGameSystemComponent(player, "game/lua/systems/player.lua")
     AddMoveComponent(player, posX, posY, 0, 0, 0) --speed doesn't matter here
-    AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 250, 250)
+    AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 180, 180)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
-    AddBoxColliderComponent(player, posX, posY, 160, 80)
+    AddBoxColliderComponent(player, posX, posY, 50, 70)
     AddCustomComponent(player, "GameTag", "PLAYER")
 
     return player
@@ -67,7 +65,9 @@ end
 function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
     AddGameSystemComponent(drone, "game/lua/systems/drone.lua")
-    AddMoveComponent(drone, posX, posY, 0, 4, 0)
+
+    xValue = -0.5 + math.random() * 1
+    AddMoveComponent(drone, posX, posY, xValue, 5, 0)
     AddTextureComponent(drone, "game/assets/textures/enemyDrone.png", posX, posY, 220, 220)
     AddBoxColliderComponent(drone, posX + 80, posY, 120, 120)
     AddCustomComponent(drone, "GameTag", "ENEMY")
