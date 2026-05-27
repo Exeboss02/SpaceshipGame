@@ -9,7 +9,7 @@ function Button:Update()
 
     if clicked then
         DeleteAllEntities()
-        pcall(dofile, "game/lua/levels/testLevel.lua")
+        pcall(dofile, "game/lua/levels/level.lua")
     end
 end
 

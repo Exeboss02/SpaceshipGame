@@ -55,7 +55,7 @@ int lua_WriteToFile(lua_State *L)
     std::string filePath = static_cast<std::string>(lua_tostring(L, 1));
     std::string data = static_cast<std::string>(lua_tostring(L, 2));
 
-    std::ofstream spawnFile(filePath);
+    std::ofstream spawnFile(filePath, std::ios::app);
 
     if (!spawnFile.is_open())
     {

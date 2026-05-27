@@ -57,8 +57,8 @@ function CreateEnemyDrone(posX, posY)
     drone = CreateEntity()
     AddGameSystemComponent(drone, "game/lua/drone.lua")
     AddMoveComponent(drone, posX, posY, 0, 1, 0)
-    AddTextureComponent(drone, "game/assets/textures/enemyDrone.png", posX, posY, 180, 180)
-    AddBoxColliderComponent(drone, posX, posY, 80, 50)
+    AddTextureComponent(drone, "game/assets/textures/enemyDrone.png", posX, posY, 220, 220)
+    AddBoxColliderComponent(drone, posX + 80, posY, 140, 140)
     AddCustomComponent(drone, "GameTag", "ENEMY")
 
     return drone
