@@ -57,4 +57,4 @@ AddGameSystemComponent(spawner, "game/lua/systems/enemySpawner.lua")
 
 player = CreatePlayer(850, 700)
 
-CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/buttons/startScreenButton.lua")
+CreateButton(20, 30, 80, 50, "game/assets/textures/mainMenu.png", "game/lua/buttons/startScreenButton.lua")

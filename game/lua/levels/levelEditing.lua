@@ -1,7 +1,7 @@
 waveString = {}
 idIndexMap = {}
 
-local test = CreateButton(20, 30, 80, 50, "game/assets/textures/nitwBridge.png", "game/lua/buttons/startScreenButton.lua") --exit button
+local test = CreateButton(20, 30, 80, 50, "game/assets/textures/mainMenu.png", "game/lua/buttons/startScreenButton.lua") --exit button
 print(test)
 print("END OF TEST----------------")
 

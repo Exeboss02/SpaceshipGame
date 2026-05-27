@@ -4,6 +4,9 @@ if not success then
     return
 end
 
+logo = CreateEntity()
+AddTextureComponent(logo, "game/assets/textures/spaceGameLogo.png", 1100, 100, 700, 400)
+
 CreateBackground("game/assets/textures/space.png", 80.0)
 
 CreateButton(100, 100, 400, 200, "game/assets/textures/levelSelect.png", "game/lua/buttons/levelButton.lua") --level select button
