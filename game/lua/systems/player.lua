@@ -19,7 +19,7 @@ function Player:Update()
 
     shoot = input.shootButton
     shootCoolDown = 0.26
-    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos + 50, move.yPos - 40)
+    coroutine.resume(self.shootTimer, shootCoolDown, shoot, "Standard", "PLAYERBULLET", move.xPos + 65, move.yPos - 40)
 
 
     if totalInput > 1 then

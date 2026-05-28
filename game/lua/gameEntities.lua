@@ -24,7 +24,7 @@ function CreateBullet(type, tag, posX, posY)
     bullet = CreateEntity()
     bulletTagMap[bullet] = tag
     AddGameSystemComponent(bullet, "game/lua/systems/bullet.lua")
-    AddBoxColliderComponent(bullet, posX, posY, 30, 80)
+    AddBoxColliderComponent(bullet, posX, posY, 30, 30)
     AddCustomComponent(bullet, "GameTag", tag)
 
     local texturePath = "game/assets/textures/playerShot.png"
@@ -33,17 +33,17 @@ function CreateBullet(type, tag, posX, posY)
     end
 
     if type == "Shotgun" then
-        texturePath = "game/assets/textures/playerShot.png"
+        texturePath = "game/assets/textures/enemyShot.png"
         xValue = -1 + math.random() * 2
         AddMoveComponent(bullet, posX, posY + 50, xValue, 5, 0)
     end
 
     if type == "SideShooter" then
-        texturePath = "game/assets/textures/playerShot.png"
+        texturePath = "game/assets/textures/enemyShot.png"
         AddMoveComponent(bullet, posX, posY - 10, 1.5, 0, 0)
     end
 
-    AddTextureComponent(bullet, texturePath, posX, posY, 80, 50)
+    AddTextureComponent(bullet, texturePath, posX, posY, 50, 50)
     
     return bullet
 end
