@@ -17,8 +17,6 @@ function Bullet:OnCollision(otherTag)
     if (bulletTagMap[self.ID] == "ENEMYBULLET" and otherTag == "PLAYER") or (bulletTagMap[self.ID] == "PLAYERBULLET" and otherTag == "ENEMY") then
         DeleteEntity(self.ID)
     end
-
-    print(otherTag)
 end
 
 return Bullet

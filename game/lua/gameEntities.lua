@@ -56,7 +56,7 @@ function CreatePlayer(posX, posY)
     AddTextureComponent(player, "game/assets/textures/spaceship.png", posX, posY, 180, 180)
     AddInputComponent(player)
     AddTimerComponent(player, 0.5)
-    AddBoxColliderComponent(player, posX, posY, 50, 70)
+    AddBoxColliderComponent(player, posX, posY, 80, 100)
     AddCustomComponent(player, "GameTag", "PLAYER")
 
     return player

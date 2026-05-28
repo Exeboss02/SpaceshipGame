@@ -48,10 +48,6 @@ function Player:OnCollision(otherTag)
         playerIsDead = true
         DeleteEntity(self.ID)
     end
-
-    print(self.hp)
-
-    --reload scene function
 end
 
 return Player
